@@ -12,12 +12,12 @@ export default {
 		// console.log("resolution = "+resolution);
 		// console.log("from = "+from);
 		var split_symbol = symbolInfo.name.split(/[:/]/)
-			const url = "/trading";
+			const url = "/api/trading";
 			const qs = {
 					fsym: split_symbol[0],
 					tsym: split_symbol[1],
 					from,
-					limit: limit ? limit : 2000, 
+					limit: limit ? limit : 200000, 
 					resolution
 				}
 			// console.log({qs})
