@@ -4,13 +4,26 @@
     "@material-ui/icons": "^4.11.2",
     "react": "^16.2.0",
     "react-dom": "^16.2.0",
-    "react-scripts": "^1.1.4",
-    "request": "^2.85.0",
+    "react-script": "^2.0.5",
+    "react-scripts": "^4.0.2",
+    "request": "^2.88.2",
     "request-promise": "^4.2.2",
     "socket.io-client": "^2.1.1"
   },
   "scripts": {
-    "start": "PORT=5000 react-scripts start",
+    "start": "react-scripts start",
     "build": "react-scripts build"
+  },
+  "browserslist": {
+    "production": [
+      ">0.2%",
+      "not dead",
+      "not op_mini all"
+    ],
+    "development": [
+      "last 1 chrome version",
+      "last 1 firefox version",
+      "last 1 safari version"
+    ]
   }
 }
