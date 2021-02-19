@@ -52,7 +52,7 @@ const useStyles = makeStyles((theme) => ({
 export default function App() {
 	const classes = useStyles();
 	const [ticker, setTicker] = React.useState('GBP/USD');
-	const [timeframe, setTimeframe] = React.useState('1');
+	const [timeframe, setTimeframe] = React.useState('1440');
 	const [range, setRange] = React.useState('2020');
 	const [amount, setAmount] = React.useState('');
 	const [currency, setCurrency] = React.useState('');

@@ -31,6 +31,7 @@ export class TVChartContainer extends React.PureComponent {
 		let fromDate = new Date(this.props.from);
 		let now = Date.now();
 		const timeframe = Math.round((now - fromDate) / (1000 * 60 * 60 * 24));
+		console.log(timeframe);
 		const widgetOptions = {
 			debug: false,
 			symbol: this.props.symbol,
@@ -58,7 +59,7 @@ export class TVChartContainer extends React.PureComponent {
 				"mainSeriesProperties.candleStyle.wickUpColor": '#336854',
 				"mainSeriesProperties.candleStyle.wickDownColor": '#7f323f',
 			},
-			timeframe: timeframe+"D"
+			// timeframe: timeframe+"D"
 
 		};
 
@@ -69,17 +70,19 @@ export class TVChartContainer extends React.PureComponent {
 		// widget. 
 		widget.onChartReady(() => {
 			this.setState({ ready: true });
-			console.log("Chart has loaded!");
+			// console.log("Chart has loaded!");
 		});
 	}
 
 	componentDidUpdate() {
 		if (this.state.widget && this.state.ready) {
-			console.log(this.state.widget);
+			// console.log(this.state.widget);
 			let fromDate = new Date(this.props.from);
+			// console.log(fromDate.getFullYear()+"-"+fromDate.getMonth()+"-"+fromDate.getDate());
 			let now = Date.now();
-			const timeframe = Math.round((now - fromDate) / (1000 * 60 * 60 * 24));
-			this.state.widget.setTimeFrame({ val: timeframe + "D", res: "1W" });
+			const timeframe = Math.floor((now - fromDate) / (1000 * 60 * 60 * 24));
+			// console.log(timeframe);
+			// this.state.widget.setTimeFrame({ val: timeframe + "D", res: "1W" });
 			this.state.widget.setSymbol(this.props.symbol, this.props.interval, () => { });
 		}
 

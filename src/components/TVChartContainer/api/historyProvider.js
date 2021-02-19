@@ -2,7 +2,7 @@ var rp = require('request-promise').defaults({json: true})
 
 //backend API url
 // const api_root = 'https://min-api.cryptocompare.com'
-const api_root = 'http://194.48.96.12'
+const api_root = 'https://testapi.tradeasy.tech'
 const history = {}
 
 export default {
@@ -10,7 +10,8 @@ export default {
 
     getBars: function(symbolInfo, resolution, from, to, first, limit) {
 		// console.log("resolution = "+resolution);
-		// console.log("from = "+from);
+		console.log("from = "+from);
+		console.log("from date = "+(new Date(from*1000)));
 		var split_symbol = symbolInfo.name.split(/[:/]/)
 			const url = "/api/trading";
 			const qs = {
@@ -27,7 +28,7 @@ export default {
                 qs,
             })
             .then(data => {
-                console.log({data})
+                // console.log({data})
 				if (data.Response && data.Response === 'Error') {
 					console.log('API error:',data.Message)
 					return []
@@ -36,12 +37,12 @@ export default {
 					console.log(`Actually returned: ${new Date(data.TimeFrom * 1000).toISOString()} - ${new Date(data.TimeTo * 1000).toISOString()}`)
 					var bars = data.Data.map(el => {
 						return {
-							time: el.datetime * 1000, //TradingView requires bar time in ms
+							time: el.time * 1000, //TradingView requires bar time in ms
 							low: el.low,
 							high: el.high,
 							open: el.open,
 							close: el.close,
-							volume: el.volumen
+							volume: el.volumefrom 
 						}
 					})
 						if (first) {
