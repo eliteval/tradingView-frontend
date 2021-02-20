@@ -1,8 +1,8 @@
 import historyProvider from './historyProvider'
+//real time view
 // import stream from './stream'
 
 const supportedResolutions = ["1", "5", "15", "30", "60", "240", "D"]
-const supportedFrom=["23"];
 const config = {
 	supported_resolutions: supportedResolutions,
 	supported_names:["GBP/USD","CAD/USD"]
@@ -34,7 +34,8 @@ export default {
 			minmov: 1,
 			pricescale: 100,
 			has_intraday: true,
-			intraday_multipliers: ["1", "5", "15", "30", "60", "240", "1440"],
+			// intraday_multipliers: ["1", "5", "15", "30", "60", "240", "1440"],
+			intraday_multipliers: ["1", "15"],
 			supported_resolution:  supportedResolutions,
 			supported_name:["GBP/USD","CAD/USD"],
 			volume_precision: 8,

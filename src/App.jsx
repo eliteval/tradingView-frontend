@@ -7,13 +7,14 @@ import FormControl from '@material-ui/core/FormControl';
 import NativeSelect from '@material-ui/core/NativeSelect';
 import InputBase from '@material-ui/core/InputBase';
 import Chip from '@material-ui/core/Chip';
-import {Assessment, SubdirectoryArrowRightOutlined} from '@material-ui/icons';
+import { Assessment } from '@material-ui/icons';
 const BootstrapInput = withStyles((theme) => ({
+	//input box designed like bootstrap
 	root: {
 		'label + &': {
 			marginTop: theme.spacing(3),
 		},
-		
+
 	},
 	input: {
 		borderRadius: 4,
@@ -45,19 +46,23 @@ const BootstrapInput = withStyles((theme) => ({
 }))(InputBase);
 
 const useStyles = makeStyles((theme) => ({
+	//margin between input boxes
 	margin: {
 		margin: theme.spacing(1),
 	},
 }));
 export default function App() {
 	const classes = useStyles();
+	//ticker
 	const [ticker, setTicker] = React.useState('GBP/USD');
+	//resolutions
 	const [timeframe, setTimeframe] = React.useState('1440');
-	const [range, setRange] = React.useState('2020');
+
+	//unused states
 	const [amount, setAmount] = React.useState('');
 	const [currency, setCurrency] = React.useState('');
 	const [trader, setTrader] = React.useState('');
-	
+
 	return (
 		<div className={'App'}>
 			<header className={'App-header'}>
@@ -77,7 +82,7 @@ export default function App() {
 					<NativeSelect
 						id="ticker-id"
 						value={ticker}
-						onChange={(e)=>setTicker(e.target.value)}
+						onChange={(e) => setTicker(e.target.value)}
 						input={<BootstrapInput />}
 					>
 						<option>GBP/USD</option>
@@ -89,7 +94,7 @@ export default function App() {
 					<NativeSelect
 						id="timeframe-id"
 						value={timeframe}
-						onChange={e=>setTimeframe(e.target.value)}
+						onChange={e => setTimeframe(e.target.value)}
 						input={<BootstrapInput />}
 					>
 						<option value={1}>1 minute</option>
@@ -102,32 +107,17 @@ export default function App() {
 					</NativeSelect>
 				</FormControl>
 				<FormControl className={classes.margin}>
-					<InputLabel htmlFor="range-id">Validation Range</InputLabel>
-					<NativeSelect
-						id="range-id"
-						value={range}
-						onChange={e=>setRange(e.target.value)}
-						input={<BootstrapInput />}
-					>
-						<option value="2021">From 2021</option>
-						<option value="2020">From 2020</option>
-						<option value="2019">From 2019</option>
-						<option value="2018">From 2018</option>
-					</NativeSelect>
-				</FormControl>
-				<FormControl className={classes.margin}>
 					<InputLabel htmlFor="amout-id">Invest amount</InputLabel>
 					<BootstrapInput id="demo-customized-textbox" value={amount}
-					 onChange={e=>setAmount(e.target.value)} />
-					
+						onChange={e => setAmount(e.target.value)} />
+
 				</FormControl>
 				<FormControl className={classes.margin}>
 					<InputLabel htmlFor="currency-id"></InputLabel>
-				
 					<NativeSelect
 						id="currency-id"
 						value={currency}
-						onChange={e=>setCurrency(e.target.value)}
+						onChange={e => setCurrency(e.target.value)}
 						input={<BootstrapInput />}
 					>
 						<option>USD</option>
@@ -138,14 +128,14 @@ export default function App() {
 					<NativeSelect
 						id="trader-id"
 						value={trader}
-						onChange={e=>setTrader(e.target.value)}
+						onChange={e => setTrader(e.target.value)}
 						input={<BootstrapInput />}
 					>
 						<option>None</option>
 					</NativeSelect>
 				</FormControl>
 			</header>
-			<TVChartContainer symbol={ticker} interval={timeframe} from={range}/>
+			<TVChartContainer symbol={ticker} interval={timeframe} />
 		</div>
 	);
 }

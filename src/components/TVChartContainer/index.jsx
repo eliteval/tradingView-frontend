@@ -12,7 +12,11 @@ function getLanguageFromURL() {
 export class TVChartContainer extends React.PureComponent {
 	constructor(props) {
 		super(props);
-		this.state = { widget: '', ready: false };
+		this.state = {
+			//tradingView widget
+			widget: '', 
+			//check whether the widget is loaded or not
+			ready: false };
 	}
 	static defaultProps = {
 		symbol: 'GBP/USD',
@@ -27,11 +31,7 @@ export class TVChartContainer extends React.PureComponent {
 		autosize: true,
 		studiesOverrides: {},
 	};
-	componentDidMount() {
-		let fromDate = new Date(this.props.from);
-		let now = Date.now();
-		const timeframe = Math.round((now - fromDate) / (1000 * 60 * 60 * 24));
-		console.log(timeframe);
+	componentDidMount() {		
 		const widgetOptions = {
 			debug: false,
 			symbol: this.props.symbol,
@@ -67,7 +67,6 @@ export class TVChartContainer extends React.PureComponent {
 			widgetOptions
 		));
 		this.setState({ widget });
-		// widget. 
 		widget.onChartReady(() => {
 			this.setState({ ready: true });
 			// console.log("Chart has loaded!");
@@ -75,53 +74,11 @@ export class TVChartContainer extends React.PureComponent {
 	}
 
 	componentDidUpdate() {
+		//ticker or the resolution changed
 		if (this.state.widget && this.state.ready) {
-			// console.log(this.state.widget);
-			let fromDate = new Date(this.props.from);
-			// console.log(fromDate.getFullYear()+"-"+fromDate.getMonth()+"-"+fromDate.getDate());
-			let now = Date.now();
-			const timeframe = Math.floor((now - fromDate) / (1000 * 60 * 60 * 24));
-			// console.log(timeframe);
-			// this.state.widget.setTimeFrame({ val: timeframe + "D", res: "1W" });
+			console.log(this.state.widget);			
 			this.state.widget.setSymbol(this.props.symbol, this.props.interval, () => { });
 		}
-
-		// const widgetOptions = {
-		// 	debug: false,
-		// 	symbol: this.props.symbol,
-		// 	datafeed: Datafeed,
-		// 	interval: this.props.interval,
-		// 	container_id: this.props.containerId,
-		// 	library_path: this.props.libraryPath,
-		// 	locale: getLanguageFromURL() || 'en',
-		// 	disabled_features: ['use_localstorage_for_settings'],
-		// 	enabled_features: ['study_templates'],
-		// 	charts_storage_url: this.props.chartsStorageUrl,
-		// 	charts_storage_api_version: this.props.chartsStorageApiVersion,
-		// 	client_id: this.props.clientId,
-		// 	user_id: this.props.userId,
-		// 	fullscreen: this.props.fullscreen,
-		// 	autosize: this.props.autosize,
-		// 	studies_overrides: this.props.studiesOverrides,
-		// 	overrides: {
-		// 		"mainSeriesProperties.showCountdown": true,
-		// 		"paneProperties.background": "#131722",
-		// 		"paneProperties.vertGridProperties.color": "#363c4e",
-		// 		"paneProperties.horzGridProperties.color": "#363c4e",
-		// 		"symbolWatermarkProperties.transparency": 90,
-		// 		"scalesProperties.textColor": "#AAA",
-		// 		"mainSeriesProperties.candleStyle.wickUpColor": '#336854',
-		// 		"mainSeriesProperties.candleStyle.wickDownColor": '#7f323f',
-		// 	}
-		// };
-
-		// const widget = (window.tvWidget = new window.TradingView.widget(
-		// 	widgetOptions
-		// ));
-
-		// widget.onChartReady(() => {
-		// 	console.log("Chart has loaded!");
-		// });
 	}
 	render() {
 		return (

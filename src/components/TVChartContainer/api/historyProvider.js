@@ -1,7 +1,6 @@
 var rp = require('request-promise').defaults({json: true})
 
 //backend API url
-// const api_root = 'https://min-api.cryptocompare.com'
 const api_root = 'https://testapi.tradeasy.tech'
 const history = {}
 
@@ -9,9 +8,6 @@ export default {
 	history: history,
 
     getBars: function(symbolInfo, resolution, from, to, first, limit) {
-		// console.log("resolution = "+resolution);
-		console.log("from = "+from);
-		console.log("from date = "+(new Date(from*1000)));
 		var split_symbol = symbolInfo.name.split(/[:/]/)
 			const url = "/api/trading";
 			const qs = {
@@ -21,8 +17,7 @@ export default {
 					limit: limit ? limit : 200000, 
 					resolution
 				}
-			// console.log({qs})
-
+		//request to the backend
         return rp({
                 url: `${api_root}${url}`,
                 qs,

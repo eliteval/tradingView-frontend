@@ -2,7 +2,7 @@
 import historyProvider from './historyProvider.js'
 // we use Socket.io client to connect to cryptocompare's socket.io stream
 var io = require('socket.io-client')
-var socket_url = 'wss://streamer.cryptocompare.com'
+var socket_url = 'wss://testapi.tradeasy.tech'
 var socket = io(socket_url)
 // keep track of subscriptions
 var _subs = []
@@ -127,7 +127,7 @@ if (rounded > lastBarSec) {
 // takes symbolInfo object as input and creates the subscription string to send to CryptoCompare
 function createChannelString(symbolInfo) {
   var channel = symbolInfo.name.split(/[:/]/)
-  const exchange = channel[0] === 'GDAX' ? 'Coinbase' : channel[0]
+  const exchange = channel[0] === 'GDAX' ? 'Curreny Rate' : channel[0]
   const to = channel[2]
   const from = channel[1]
  // subscribe to the CryptoCompare trade channel for the pair and exchange
