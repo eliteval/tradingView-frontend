@@ -1,7 +1,7 @@
 var rp = require('request-promise').defaults({json: true})
 
 //backend API url
-const api_root = 'https://testapi.tradeasy.tech'
+const api_root = 'https://backtradingview.tradeasy.tech'
 const history = {}
 
 export default {
