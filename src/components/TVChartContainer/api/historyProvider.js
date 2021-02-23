@@ -14,7 +14,7 @@ export default {
 					fsym: split_symbol[0],
 					tsym: split_symbol[1],
 					toTs:  to ? to : '',
-					limit: limit ? limit : 200000, 
+					limit: limit ? limit : 2000, 
 					resolution
 				}
 		//request to the backend
