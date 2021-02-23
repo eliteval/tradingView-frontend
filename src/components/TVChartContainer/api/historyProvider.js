@@ -13,6 +13,7 @@ export default {
 			const qs = {
 					fsym: split_symbol[0],
 					tsym: split_symbol[1],
+					fromTs: from ? from : '',
 					toTs:  to ? to : '',
 					limit: limit ? limit : 2000, 
 					resolution
