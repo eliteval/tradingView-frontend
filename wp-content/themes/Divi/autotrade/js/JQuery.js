@@ -2102,7 +2102,7 @@ $(function () {
         console.log(validation_data);
         // $("#tradingView-content").load(`https://tradingview.tradeasy.tech/${encodeURIComponent(validation_data[0].value)}`+
         // `/${encodeURIComponent(validation_data[1].value)}/${encodeURIComponent(validation_data[2].value)}/${encodeURIComponent(validation_data[3].value)}/${encodeURIComponent(validation_data[4].value)}/${encodeURIComponent(validation_data[5].value)}/${encodeURIComponent(validation_data[6].value)}/${encodeURIComponent(validation_data[7].value)}`);
-        $("#tradingView-content").attr(src,`https://tradingview.tradeasy.tech/${encodeURIComponent(validation_data[0].value)}`+
+        $("#tradingView-content").attr('src',`https://tradingview.tradeasy.tech/${encodeURIComponent(validation_data[0].value)}`+
         `/${encodeURIComponent(validation_data[1].value)}/${encodeURIComponent(validation_data[2].value)}/${encodeURIComponent(validation_data[3].value)}/${encodeURIComponent(validation_data[4].value)}/${encodeURIComponent(validation_data[5].value)}/${encodeURIComponent(validation_data[6].value)}/${encodeURIComponent(validation_data[7].value)}`)
         //Variable que sirve para saber si ya hemos detectado datos para no seguir contando
         var alreadyIn = false;
@@ -2113,6 +2113,7 @@ $(function () {
                 '<div style="position: relative;top: 50%;"><img src="images/ajax-loader-green.gif" style="margin-top: -2%;"><span>Data Insertion...</span></div>'
             )
             .show();
+        $("#tradingView").hide();
         $(".validatedScreen").hide();
         $(".validatingScreen").show();
         $("#infoOperations table > tbody").children().remove();
