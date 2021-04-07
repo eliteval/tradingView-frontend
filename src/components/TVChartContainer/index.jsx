@@ -14,9 +14,11 @@ export class TVChartContainer extends React.PureComponent {
 		super(props);
 		this.state = {
 			//tradingView widget
-			widget: '', 
+			widget: '',
 			//check whether the widget is loaded or not
-			ready: false };
+			ready: false
+		};
+		console.log(props);
 	}
 	static defaultProps = {
 		symbol: 'GBP/USD',
@@ -31,7 +33,7 @@ export class TVChartContainer extends React.PureComponent {
 		autosize: true,
 		studiesOverrides: {},
 	};
-	componentDidMount() {		
+	componentDidMount() {
 		const widgetOptions = {
 			debug: false,
 			symbol: this.props.symbol,
@@ -40,8 +42,8 @@ export class TVChartContainer extends React.PureComponent {
 			container_id: this.props.containerId,
 			library_path: this.props.libraryPath,
 			locale: getLanguageFromURL() || 'en',
-			disabled_features: ['use_localstorage_for_settings'],
-			enabled_features: ['study_templates'],
+			disabled_features: [],
+			enabled_features: ['header_widget','study_templates'],
 			charts_storage_url: this.props.chartsStorageUrl,
 			charts_storage_api_version: this.props.chartsStorageApiVersion,
 			client_id: this.props.clientId,
@@ -70,16 +72,11 @@ export class TVChartContainer extends React.PureComponent {
 		widget.onChartReady(() => {
 			this.setState({ ready: true });
 			// console.log("Chart has loaded!");
+
+			//widget.createStudy('EMA', )
 		});
 	}
-
-	componentDidUpdate() {
-		//ticker or the resolution changed
-		if (this.state.widget && this.state.ready) {
-			console.log(this.state.widget);			
-			this.state.widget.setSymbol(this.props.symbol, this.props.interval, () => { });
-		}
-	}
+	
 	render() {
 		return (
 			<div
