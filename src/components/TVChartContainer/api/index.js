@@ -43,7 +43,7 @@ export default {
 		}
 
 		if (split_data[1].match(/USD|EUR|JPY|AUD|GBP|KRW|CNY/)) {
-			symbol_stub.pricescale = 100
+			symbol_stub.pricescale = 100000
 		}
 		setTimeout(function() {
 			onSymbolResolvedCallback(symbol_stub)
