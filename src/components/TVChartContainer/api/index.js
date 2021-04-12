@@ -2,7 +2,7 @@ import historyProvider from './historyProvider'
 //real time view
 // import stream from './stream'
 
-const supportedResolutions = ["1", "5", "15", "30", "60", "240", "D"]
+const supportedResolutions = ["1", "5", "15", "30", "60", "240", "1440"]
 const config = {
 	supported_resolutions: supportedResolutions,
 	supported_names:["GBP/USD","CAD/USD"]
