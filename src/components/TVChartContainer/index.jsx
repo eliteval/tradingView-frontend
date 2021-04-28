@@ -1,88 +1,305 @@
-import * as React from 'react';
-import './index.css';
-import Datafeed from './api/'
-
+import * as React from "react";
+import "./index.css";
+import Datafeed from "./api/";
 
 function getLanguageFromURL() {
-	const regex = new RegExp('[\\?&]lang=([^&#]*)');
-	const results = regex.exec(window.location.search);
-	return results === null ? null : decodeURIComponent(results[1].replace(/\+/g, ' '));
+  const regex = new RegExp("[\\?&]lang=([^&#]*)");
+  const results = regex.exec(window.location.search);
+  return results === null
+    ? null
+    : decodeURIComponent(results[1].replace(/\+/g, " "));
 }
-
+function pintarLinea(widget, a1, b1, price1, price2) {
+  widget.activeChart().createMultipointShape(
+    [
+      { time: a1 / 1000, price: price1, channel: "open" },
+      { time: b1 / 1000, price: price2, channel: "open" },
+    ],
+    {
+      shape: "trend_line",
+      lock: true,
+      disableSelection: true,
+      disableSave: true,
+      disableUndo: true,
+    }
+  );
+}
+function pintarFlecha(widget, a1, shape, text, price) {
+  widget.activeChart().createShape(
+    { time: a1 / 1000, price, channel: "open" },
+    {
+      shape: shape,
+      text: text,
+      lock: true,
+      disableSelection: true,
+      disableSave: true,
+      disableUndo: true,
+    }
+  );
+}
 export class TVChartContainer extends React.PureComponent {
-	constructor(props) {
-		super(props);
-		this.state = {
-			//tradingView widget
-			widget: '',
-			//check whether the widget is loaded or not
-			ready: false
-		};
-		console.log(props);
-	}
-	static defaultProps = {
-		symbol: 'GBP/USD',
-		interval: '1',
-		containerId: 'tv_chart_container',
-		libraryPath: '/charting_library/',
-		chartsStorageUrl: 'https://saveload.tradingview.com',
-		chartsStorageApiVersion: '1.1',
-		clientId: 'tradingview.com',
-		userId: 'public_user_id',
-		fullscreen: false,
-		autosize: true,
-		studiesOverrides: {},
-	};
-	componentDidMount() {
-		const widgetOptions = {
-			debug: false,
-			symbol: this.props.symbol,
-			datafeed: Datafeed,
-			interval: this.props.interval,
-			container_id: this.props.containerId,
-			library_path: this.props.libraryPath,
-			locale: getLanguageFromURL() || 'en',
-			disabled_features: [],
-			enabled_features: ['header_widget','study_templates'],
-			charts_storage_url: this.props.chartsStorageUrl,
-			charts_storage_api_version: this.props.chartsStorageApiVersion,
-			client_id: this.props.clientId,
-			user_id: this.props.userId,
-			fullscreen: this.props.fullscreen,
-			autosize: this.props.autosize,
-			studies_overrides: this.props.studiesOverrides,
-			overrides: {
-				"mainSeriesProperties.showCountdown": true,
-				"paneProperties.background": "#ecf9ff",
-				"paneProperties.vertGridProperties.color": "#363c4e",
-				"paneProperties.horzGridProperties.color": "#363c4e",
-				"symbolWatermarkProperties.transparency": 90,
-				"scalesProperties.textColor": "#AAA",
-				"mainSeriesProperties.candleStyle.wickUpColor": '#336854',
-				"mainSeriesProperties.candleStyle.wickDownColor": '#7f323f',
-			},
-			// timeframe: timeframe+"D"
+  constructor(props) {
+    super(props);
+    console.log(props);
+  }
+  static defaultProps = {
+    symbol: "GBP/USD",
+    interval: "1",
+    containerId: "tv_chart_container",
+    libraryPath: "/charting_library/",
+    chartsStorageUrl: "https://saveload.tradingview.com",
+    chartsStorageApiVersion: "1.1",
+    clientId: "tradingview.com",
+    userId: "public_user_id",
+    fullscreen: false,
+    autosize: false,
+    studiesOverrides: {},
+  };
+  componentDidMount() {
+    const widgetOptions = {
+      debug: false,
+      symbol: this.props.symbol,
+      datafeed: Datafeed,
+      interval: this.props.interval,
+      container_id: this.props.containerId,
+      library_path: this.props.libraryPath,
+      locale: getLanguageFromURL() || "en",
+      disabled_features: [],
+      enabled_features: ["header_widget"],
+      charts_storage_url: this.props.chartsStorageUrl,
+      charts_storage_api_version: this.props.chartsStorageApiVersion,
+      client_id: this.props.clientId,
+      user_id: this.props.userId,
+      fullscreen: this.props.fullscreen,
+      autosize: false,
+      overrides: {
+        "mainSeriesProperties.showCountdown": true,
+        "paneProperties.background": "#ecf9ff",
+        "paneProperties.vertGridProperties.color": "#363c4e",
+        "paneProperties.horzGridProperties.color": "#363c4e",
+        "symbolWatermarkProperties.transparency": 90,
+        "scalesProperties.textColor": "#AAA",
+        "mainSeriesProperties.candleStyle.wickUpColor": "#336854",
+        "mainSeriesProperties.candleStyle.wickDownColor": "#7f323f",
+      },
+      // timeframe: timeframe+"D"
+    };
 
-		};
+    const widget = (window.tvWidget = new window.TradingView.widget(
+      widgetOptions
+    ));
+    const props=this.props;
+    widget.onChartReady(() => {
+      let fechaInicio = new Date(2020, 9, 18) / 1000;
+      setTimeout(() => {
+        for (let i = 0; i < 100; i++) {
+          let fechaFin = fechaInicio - 3600 * 24 * 5;
+          pintarLinea(widget, fechaInicio, fechaFin);
+          pintarFlecha(widget, fechaInicio, "arrow_up", "Buy");
+          pintarFlecha(widget, fechaFin, "arrow_down", "Close");
+          fechaInicio -= 3600 * 24 * 5;
+        }
+      }, 5000);
+      let url;
+      if (props.type == "test") {
+        url =
+          "https://test.tradeasy.tech/wp-content/themes/Divi/autotrade/validation_points.php?lang=" +
+          this.props.lang;
+      } else if (props.type == "prod") {
+        url =
+          "https://tradeasy.tech/wp-content/themes/Divi/autotrade/validation_points.php?lang" +
+          this.props.lang;
+      } else {
+        url =
+          "https://test.tradeasy.tech/wp-content/themes/Divi/autotrade/validation_points.php?lang=eng";
+      }
 
-		const widget = (window.tvWidget = new window.TradingView.widget(
-			widgetOptions
-		));
-		this.setState({ widget });
-		widget.onChartReady(() => {
-			this.setState({ ready: true });
-			// console.log("Chart has loaded!");
+      let updateInterval = 3000;
+      let countt = 0;
+      var updateChart = async function (validateId, currency) {
+        let timeOut_seconds = ( props.timeOut ? props.timeOut : 180) / 3;
 
-			//widget.createStudy('EMA', )
-		});
-	}
-	
-	render() {
-		return (
-			<div
-				id={this.props.containerId}
-				className={'TVChartContainer'}
-			/>
-		);
-	}
+        if (countt > timeOut_seconds) {
+          clearInterval(intervalFunction);
+        }
+        let alreadyIn = false;
+        //modification needed
+        try {
+          const response = await fetch(url, {
+            method: "POST",
+            headers: {
+              "content-type": "application/json",
+            },
+            body: JSON.stringify({
+              sesion_val_id: validateId,
+              session_val_currency: currency,
+            }),
+          });
+          const data = await response.json();
+          if (response.status == 200) {
+            console.log("Recibido punto de validación!");
+            let y_axix = data.y_axix;
+            let n = 0;
+
+            if (data.status == "N") {
+              countt++;
+            } else if (data.status == "P") {
+              if (y_axix.length > 0) {
+                n = 0;
+                alreadyIn = true;
+                let { operationsDetail } = data;
+                for (var i = 0; i < y_axix.length; i++) {
+                  if (operationsDetail[i].tipoOP != -1) {
+                    const profit = parseFloat(operationsDetail[i].OrderProf);
+                    const fechaFin = new Date(operationsDetail[i].fechaFin);
+                    const fechaIni = new Date(operationsDetail[i].fechaIni);
+                    const precioFin = parseFloat(operationsDetail[i].precioFin);
+                    const precioIni = parseFloat(operationsDetail[i].precioIni);
+                    const balance = parseFloat(y_axix[i]);
+                    if (operationsDetail[i].tipoOP.indexOf("Sell") == 0) {
+                      //sell
+                      pintarLinea(
+                        widget,
+                        fechaIni,
+                        fechaFin,
+                        precioIni,
+                        precioFin
+                      );
+                      pintarFlecha(
+                        widget,
+                        fechaIni,
+                        "arrow_down",
+                        "Sell",
+                        precioIni
+                      );
+                      pintarFlecha(
+                        widget,
+                        fechaFin,
+                        "arrow_up",
+                        profit,
+                        precioFin
+                      );
+                    } else {
+                      //buy
+                      pintarLinea(
+                        widget,
+                        fechaIni,
+                        fechaFin,
+                        precioIni,
+                        precioFin
+                      );
+                      pintarFlecha(
+                        widget,
+                        fechaIni,
+                        "arrow_up",
+                        "Buy",
+                        precioIni
+                      );
+                      pintarFlecha(
+                        widget,
+                        fechaFin,
+                        "arrow_down",
+                        profit,
+                        precioFin
+                      );
+                    }
+                  }
+                }
+                // console.log(dps);
+              } else if (alreadyIn == false) {
+                console.log("Estoy contando una vez empezado");
+                countt++;
+              }
+            } else if (data.status == "F") {
+              if (y_axix != "") {
+                // JFS - 01/07/2020 - bug no se muestra la ultima operacion
+                //if (y_axis_points.length < data.validation_points && y_axix.length > 0) {
+                if (y_axix.length > 0) {
+                  for (var i = 0; i < y_axix.length; i++) {
+                    let { operationsDetail } = data;
+                    if (operationsDetail[i].tipoOP != -1) {
+                      const profit = parseFloat(operationsDetail[i].OrderProf);
+                      const fechaFin = new Date(operationsDetail[i].fechaFin);
+                      const fechaIni = new Date(operationsDetail[i].fechaIni);
+                      const precioFin = parseFloat(
+                        operationsDetail[i].precioFin
+                      );
+                      const precioIni = parseFloat(
+                        operationsDetail[i].precioIni
+                      );
+                      const balance = parseFloat(y_axix[i]);
+                      if (operationsDetail[i].tipoOP.indexOf("Sell") == 0) {
+                        //sell
+                        pintarLinea(
+                          widget,
+                          fechaIni,
+                          fechaFin,
+                          precioIni,
+                          precioFin
+                        );
+                        pintarFlecha(
+                          widget,
+                          fechaIni,
+                          "arrow_down",
+                          "Sell",
+                          precioIni
+                        );
+                        pintarFlecha(
+                          widget,
+                          fechaFin,
+                          "arrow_up",
+                          profit,
+                          precioFin
+                        );
+                      } else {
+                        //buy
+                        pintarLinea(
+                          widget,
+                          fechaIni,
+                          fechaFin,
+                          precioIni,
+                          precioFin
+                        );
+                        pintarFlecha(
+                          widget,
+                          fechaIni,
+                          "arrow_up",
+                          "Buy",
+                          precioIni
+                        );
+                        pintarFlecha(
+                          widget,
+                          fechaFin,
+                          "arrow_down",
+                          profit,
+                          precioFin
+                        );
+                      }
+                    }
+                  }
+                }
+              }
+
+              if (data.report == null) {
+                countt++;
+              }
+              clearInterval(intervalFunction);
+            } else if (data.status == "E") {
+              clearInterval(intervalFunction);
+            }
+          }
+        } catch (err) {}
+      };
+
+      updateChart(props.validateId, props.currency);
+
+      let intervalFunction = setInterval(function () {
+        updateChart(props.validateId, props.currency);
+      }, updateInterval);
+    });
+  }
+
+  render() {
+    return <div id={this.props.containerId} className={"TVChartContainer"} />;
+  }
 }

@@ -12,6 +12,33 @@ export default function App(props) {
     { key: 105, val: "AUD/USD" },
     { key: 106, val: "USD/CAD" },
   ];
-  return <TVChartContainer interval={intervals[Number(props.match.params.time_frame)-1] ? intervals[Number(props.match.params.time_frame)-1] : 15}
-   symbol={tickers.find(ele=>ele.key==props.match.params.ticker)? tickers.find(ele=>ele.key==props.match.params.ticker).val : "GBP/USD"} />;
+  return (
+    <TVChartContainer
+      interval={
+        intervals[Number(props.match.params.time_frame) - 1]
+          ? intervals[Number(props.match.params.time_frame) - 1]
+          : 15
+      }
+      symbol={
+        tickers.find((ele) => ele.key == props.match.params.ticker)
+          ? tickers.find((ele) => ele.key == props.match.params.ticker).val
+          : "GBP/USD"
+      }
+      timeOut={
+        props.match.params.timeOut
+      }
+      validateId={
+        props.match.params.validateId
+      }
+      currency={
+        props.match.params.currency
+      }
+      type={
+        props.match.params.type
+      }
+      lang={
+        props.match.params.lang
+      }
+    />
+  );
 }
