@@ -15,4 +15,3 @@ ReactDOM.render(
   </Router>,
   document.getElementById("root")
 );
-//&currency=:currency&ticker=:ticker&time_frame=:time_frame&start-date=:start-date&end-date=:end-date&user_id=:user_id&session_strategy_id=:session_strategy_id
