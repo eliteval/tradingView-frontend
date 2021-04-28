@@ -89,213 +89,174 @@ export class TVChartContainer extends React.PureComponent {
       widgetOptions
     ));
     const props = this.props;
-    widget.onChartReady(() => {
-      let fechaInicio = new Date(2020, 9, 18) / 1000;
-      setTimeout(() => {
-        for (let i = 0; i < 100; i++) {
-          let fechaFin = fechaInicio - 3600 * 24 * 5;
-          pintarLinea(widget, fechaInicio, fechaFin);
-          pintarFlecha(widget, fechaInicio, "arrow_up", "Buy");
-          pintarFlecha(widget, fechaFin, "arrow_down", "Close");
-          fechaInicio -= 3600 * 24 * 5;
-        }
-      }, 5000);
-      let url;
-      if (props.type == "test") {
-        url =
-          "https://test.tradeasy.tech/wp-content/themes/Divi/autotrade/validation_points.php?lang=" +
-          this.props.lang;
-      } else if (props.type == "prod") {
-        url =
-          "https://tradeasy.tech/wp-content/themes/Divi/autotrade/validation_points.php?lang" +
-          this.props.lang;
-      } else {
-        url =
-          "https://test.tradeasy.tech/wp-content/themes/Divi/autotrade/validation_points.php?lang=eng";
-      }
+    widget.onChartReady(() => {      
       setTimeout(() => {
         let updateInterval = 3000;
         let countt = 0;
-        var updateChart = async function (validateId, currency) {
-          let timeOut_seconds = (props.timeOut ? props.timeOut : 180) / 3;
-
-          if (countt > timeOut_seconds) {
-            clearInterval(intervalFunction);
-          }
-          let alreadyIn = false;
+        var updateChart = async function (validateId, currency) {          
           //modification needed
           try {
             console.log(parent.chart_data);
             console.log(parent.parent.chart_data);
-            const response = await fetch(url, {
-              method: "POST",
-              headers: {
-                "content-type": "application/json",
-              },
-              body: JSON.stringify({
-                sesion_val_id: validateId,
-                session_val_currency: currency,
-              }),
-            });
-            const data = await response.json();
-            if (response.status == 200) {
-              console.log("Recibido punto de validación!");
-              let y_axix = data.y_axix;
-              let n = 0;
+            
+            // if (response.status == 200) {
+            //   console.log("Recibido punto de validación!");
+            //   let y_axix = data.y_axix;
+            //   let n = 0;
 
-              if (data.status == "N") {
-                countt++;
-              } else if (data.status == "P") {
-                if (y_axix.length > 0) {
-                  n = 0;
-                  alreadyIn = true;
-                  let { operationsDetail } = data;
-                  for (var i = 0; i < y_axix.length; i++) {
-                    if (operationsDetail[i].tipoOP != -1) {
-                      const profit = parseFloat(operationsDetail[i].OrderProf);
-                      const fechaFin = new Date(operationsDetail[i].fechaFin);
-                      const fechaIni = new Date(operationsDetail[i].fechaIni);
-                      const precioFin = parseFloat(
-                        operationsDetail[i].precioFin
-                      );
-                      const precioIni = parseFloat(
-                        operationsDetail[i].precioIni
-                      );
-                      const balance = parseFloat(y_axix[i]);
-                      if (operationsDetail[i].tipoOP.indexOf("Sell") == 0) {
-                        //sell
-                        pintarLinea(
-                          widget,
-                          fechaIni,
-                          fechaFin,
-                          precioIni,
-                          precioFin
-                        );
-                        pintarFlecha(
-                          widget,
-                          fechaIni,
-                          "arrow_down",
-                          "Sell",
-                          precioIni
-                        );
-                        pintarFlecha(
-                          widget,
-                          fechaFin,
-                          "arrow_up",
-                          profit,
-                          precioFin
-                        );
-                      } else {
-                        //buy
-                        pintarLinea(
-                          widget,
-                          fechaIni,
-                          fechaFin,
-                          precioIni,
-                          precioFin
-                        );
-                        pintarFlecha(
-                          widget,
-                          fechaIni,
-                          "arrow_up",
-                          "Buy",
-                          precioIni
-                        );
-                        pintarFlecha(
-                          widget,
-                          fechaFin,
-                          "arrow_down",
-                          profit,
-                          precioFin
-                        );
-                      }
-                    }
-                  }
-                  // console.log(dps);
-                } else if (alreadyIn == false) {
-                  console.log("Estoy contando una vez empezado");
-                  countt++;
-                }
-              } else if (data.status == "F") {
-                if (y_axix != "") {
-                  // JFS - 01/07/2020 - bug no se muestra la ultima operacion
-                  //if (y_axis_points.length < data.validation_points && y_axix.length > 0) {
-                  if (y_axix.length > 0) {
-                    for (var i = 0; i < y_axix.length; i++) {
-                      let { operationsDetail } = data;
-                      if (operationsDetail[i].tipoOP != -1) {
-                        const profit = parseFloat(
-                          operationsDetail[i].OrderProf
-                        );
-                        const fechaFin = new Date(operationsDetail[i].fechaFin);
-                        const fechaIni = new Date(operationsDetail[i].fechaIni);
-                        const precioFin = parseFloat(
-                          operationsDetail[i].precioFin
-                        );
-                        const precioIni = parseFloat(
-                          operationsDetail[i].precioIni
-                        );
-                        const balance = parseFloat(y_axix[i]);
-                        if (operationsDetail[i].tipoOP.indexOf("Sell") == 0) {
-                          //sell
-                          pintarLinea(
-                            widget,
-                            fechaIni,
-                            fechaFin,
-                            precioIni,
-                            precioFin
-                          );
-                          pintarFlecha(
-                            widget,
-                            fechaIni,
-                            "arrow_down",
-                            "Sell",
-                            precioIni
-                          );
-                          pintarFlecha(
-                            widget,
-                            fechaFin,
-                            "arrow_up",
-                            profit,
-                            precioFin
-                          );
-                        } else {
-                          //buy
-                          pintarLinea(
-                            widget,
-                            fechaIni,
-                            fechaFin,
-                            precioIni,
-                            precioFin
-                          );
-                          pintarFlecha(
-                            widget,
-                            fechaIni,
-                            "arrow_up",
-                            "Buy",
-                            precioIni
-                          );
-                          pintarFlecha(
-                            widget,
-                            fechaFin,
-                            "arrow_down",
-                            profit,
-                            precioFin
-                          );
-                        }
-                      }
-                    }
-                  }
-                }
+            //   if (data.status == "N") {
+            //     countt++;
+            //   } else if (data.status == "P") {
+            //     if (y_axix.length > 0) {
+            //       n = 0;
+            //       alreadyIn = true;
+            //       let { operationsDetail } = data;
+            //       for (var i = 0; i < y_axix.length; i++) {
+            //         if (operationsDetail[i].tipoOP != -1) {
+            //           const profit = parseFloat(operationsDetail[i].OrderProf);
+            //           const fechaFin = new Date(operationsDetail[i].fechaFin);
+            //           const fechaIni = new Date(operationsDetail[i].fechaIni);
+            //           const precioFin = parseFloat(
+            //             operationsDetail[i].precioFin
+            //           );
+            //           const precioIni = parseFloat(
+            //             operationsDetail[i].precioIni
+            //           );
+            //           const balance = parseFloat(y_axix[i]);
+            //           if (operationsDetail[i].tipoOP.indexOf("Sell") == 0) {
+            //             //sell
+            //             pintarLinea(
+            //               widget,
+            //               fechaIni,
+            //               fechaFin,
+            //               precioIni,
+            //               precioFin
+            //             );
+            //             pintarFlecha(
+            //               widget,
+            //               fechaIni,
+            //               "arrow_down",
+            //               "Sell",
+            //               precioIni
+            //             );
+            //             pintarFlecha(
+            //               widget,
+            //               fechaFin,
+            //               "arrow_up",
+            //               profit,
+            //               precioFin
+            //             );
+            //           } else {
+            //             //buy
+            //             pintarLinea(
+            //               widget,
+            //               fechaIni,
+            //               fechaFin,
+            //               precioIni,
+            //               precioFin
+            //             );
+            //             pintarFlecha(
+            //               widget,
+            //               fechaIni,
+            //               "arrow_up",
+            //               "Buy",
+            //               precioIni
+            //             );
+            //             pintarFlecha(
+            //               widget,
+            //               fechaFin,
+            //               "arrow_down",
+            //               profit,
+            //               precioFin
+            //             );
+            //           }
+            //         }
+            //       }
+            //       // console.log(dps);
+            //     } else if (alreadyIn == false) {
+            //       console.log("Estoy contando una vez empezado");
+            //       countt++;
+            //     }
+            //   } else if (data.status == "F") {
+            //     if (y_axix != "") {
+            //       // JFS - 01/07/2020 - bug no se muestra la ultima operacion
+            //       //if (y_axis_points.length < data.validation_points && y_axix.length > 0) {
+            //       if (y_axix.length > 0) {
+            //         for (var i = 0; i < y_axix.length; i++) {
+            //           let { operationsDetail } = data;
+            //           if (operationsDetail[i].tipoOP != -1) {
+            //             const profit = parseFloat(
+            //               operationsDetail[i].OrderProf
+            //             );
+            //             const fechaFin = new Date(operationsDetail[i].fechaFin);
+            //             const fechaIni = new Date(operationsDetail[i].fechaIni);
+            //             const precioFin = parseFloat(
+            //               operationsDetail[i].precioFin
+            //             );
+            //             const precioIni = parseFloat(
+            //               operationsDetail[i].precioIni
+            //             );
+            //             const balance = parseFloat(y_axix[i]);
+            //             if (operationsDetail[i].tipoOP.indexOf("Sell") == 0) {
+            //               //sell
+            //               pintarLinea(
+            //                 widget,
+            //                 fechaIni,
+            //                 fechaFin,
+            //                 precioIni,
+            //                 precioFin
+            //               );
+            //               pintarFlecha(
+            //                 widget,
+            //                 fechaIni,
+            //                 "arrow_down",
+            //                 "Sell",
+            //                 precioIni
+            //               );
+            //               pintarFlecha(
+            //                 widget,
+            //                 fechaFin,
+            //                 "arrow_up",
+            //                 profit,
+            //                 precioFin
+            //               );
+            //             } else {
+            //               //buy
+            //               pintarLinea(
+            //                 widget,
+            //                 fechaIni,
+            //                 fechaFin,
+            //                 precioIni,
+            //                 precioFin
+            //               );
+            //               pintarFlecha(
+            //                 widget,
+            //                 fechaIni,
+            //                 "arrow_up",
+            //                 "Buy",
+            //                 precioIni
+            //               );
+            //               pintarFlecha(
+            //                 widget,
+            //                 fechaFin,
+            //                 "arrow_down",
+            //                 profit,
+            //                 precioFin
+            //               );
+            //             }
+            //           }
+            //         }
+            //       }
+            //     }
 
-                if (data.report == null) {
-                  countt++;
-                }
-                clearInterval(intervalFunction);
-              } else if (data.status == "E") {
-                clearInterval(intervalFunction);
-              }
-            }
+            //     if (data.report == null) {
+            //       countt++;
+            //     }
+            //     clearInterval(intervalFunction);
+            //   } else if (data.status == "E") {
+            //     clearInterval(intervalFunction);
+            //   }
+            // }
           } catch (err) {}
         };
 
