@@ -95,7 +95,7 @@ export class TVChartContainer extends React.PureComponent {
         let countt = 0;
         var updateChart = async function (validateId, currency) {          
           //modification needed
-          try {
+          // try {
             console.log(parent.chart_data);
             console.log(parent.parent.chart_data);
             
@@ -257,7 +257,9 @@ export class TVChartContainer extends React.PureComponent {
             //     clearInterval(intervalFunction);
             //   }
             // }
-          } catch (err) {}
+          // } catch (err) {
+          //   console.log(err);
+          // }
         };
 
         updateChart(props.validateId, props.currency);
