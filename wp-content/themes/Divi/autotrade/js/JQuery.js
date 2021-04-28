@@ -6,6 +6,7 @@ var last_screen = 0;
  * @global
  */
 var sid;
+var chart_data = [];
 $(function () {
   /*var snackbar = mdc.snackbar.MDCSnackbar.attachTo(
         document.querySelector(".mdc-snackbar")
@@ -2112,12 +2113,12 @@ $(function () {
         let showChart = true;
         let typeToTradingView;
         if (document.location.hostname == "test.tradeasy.tech") {
-            typeToTradingView='test';
+          typeToTradingView = "test";
           var url =
             "https://test.tradeasy.tech/wp-content/themes/Divi/autotrade/validation_points.php?lang=" +
             lang;
         } else if (document.location.hostname == "tradeasy.tech") {
-            typeToTradingView='prod';
+          typeToTradingView = "prod";
           var url =
             "https://tradeasy.tech/wp-content/themes/Divi/autotrade/validation_points.php?lang" +
             lang;
@@ -2155,6 +2156,11 @@ $(function () {
               countt++;
             } else if (responseData.status == "P") {
               if (y_axix.length > 0) {
+                let { operationsDetail } = responseData;
+                chart_data.push({
+                  y_axix,
+                  operationsDetail,
+                });
                 if (showChart) {
                   $(".validatingGraph").hide();
                   $("#chartContainer").show();
@@ -2174,7 +2180,6 @@ $(function () {
                     y: parseFloat(y_axix[i]),
                     num: y_axis_points.length,
                   };
-                  let { operationsDetail } = responseData;
                   if (operationsDetail[i].tipoOP != -1) {
                     let row = $("<tr></tr>");
                     $("#infoOperations table > tbody").append(row);
@@ -2210,12 +2215,16 @@ $(function () {
                 // JFS - 01/07/2020 - bug no se muestra la ultima operacion
                 //if (y_axis_points.length < responseData.validation_points && y_axix.length > 0) {
                 if (y_axix.length > 0) {
+                  let { operationsDetail } = responseData;
+                  chart_data.push({
+                    y_axix,
+                    operationsDetail,
+                  });
                   for (var i = 0; i < y_axix.length; i++) {
                     let dataPoint = {
                       y: parseFloat(y_axix[i]),
                       num: y_axis_points.length,
                     };
-                    let { operationsDetail } = responseData;
                     if (operationsDetail[i].tipoOP != -1) {
                       let row = $("<tr></tr>");
                       $("#infoOperations table > tbody").append(row);

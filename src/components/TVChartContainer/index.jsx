@@ -125,6 +125,8 @@ export class TVChartContainer extends React.PureComponent {
           let alreadyIn = false;
           //modification needed
           try {
+            console.log(parent.chart_data);
+            console.log(parent.parent.chart_data);
             const response = await fetch(url, {
               method: "POST",
               headers: {
