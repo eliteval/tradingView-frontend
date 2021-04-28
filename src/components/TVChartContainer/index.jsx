@@ -266,7 +266,7 @@ export class TVChartContainer extends React.PureComponent {
           updateChart(props.validateId, props.currency);
         }, updateInterval);
       });
-    }, 20000);
+    }, 2000);
   }
 
   render() {
