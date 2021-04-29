@@ -98,6 +98,7 @@ export class TVChartContainer extends React.PureComponent {
         while (dataLength < chart_data.length) {
           if (chart_data[dataLength].end === true) {
             clearInterval(intervalFunction);
+            console.log(chart_data);
             break;
           }
           try {
@@ -183,6 +184,7 @@ export class TVChartContainer extends React.PureComponent {
                       );
                     }
                     clearInterval(intervalFunction);
+                    console.log(chart_data);
                     break;
                   }
                 }
@@ -275,6 +277,7 @@ export class TVChartContainer extends React.PureComponent {
                         );
                       }
                       clearInterval(intervalFunction);
+                      console.log(chart_data);
                       break;
                     }
                   }
