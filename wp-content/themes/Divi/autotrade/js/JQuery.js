@@ -1915,8 +1915,7 @@ $(function () {
   $("#validate-next").on("click", function () {
     var text = $(".validatingGraph").html();
     var countt = 0;
-    const validation_data = $(".validate-form").serializeArray();
-    console.log(validation_data);
+    const validation_data = $(".validate-form").serializeArray();    
     // $("#tradingView-content").load(`https://tradingview.tradeasy.tech/${encodeURIComponent(validation_data[0].value)}`+
     // `/${encodeURIComponent(validation_data[1].value)}/${encodeURIComponent(validation_data[2].value)}/${encodeURIComponent(validation_data[3].value)}/${encodeURIComponent(validation_data[4].value)}/${encodeURIComponent(validation_data[5].value)}/${encodeURIComponent(validation_data[6].value)}/${encodeURIComponent(validation_data[7].value)}`);
     //Variable que sirve para saber si ya hemos detectado datos para no seguir contando
@@ -2040,7 +2039,6 @@ $(function () {
       let selected = $("#validation_range > option:selected");
       var validation_data = $(".validate-form").serializeArray();
       var url = $("#validate-next").attr("data-action");
-      console.log(url);
       $.ajax({
         url: url,
         type: "POST",
@@ -2182,7 +2180,6 @@ $(function () {
                   operationsDetail,
                   status: responseData.status,
                 });
-                console.log(tt);                
                 frame.contentWindow.postMessage(
                   tt,
                   "https://tradingview.tradeasy.tech"
@@ -2248,7 +2245,6 @@ $(function () {
                     operationsDetail,
                     status: responseData.status,
                   });
-                  console.log(tt);
                   frame.contentWindow.postMessage(
                     tt,
                     "https://tradingview.tradeasy.tech"

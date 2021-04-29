@@ -112,6 +112,10 @@ export class TVChartContainer extends React.PureComponent {
                     const fechaIni = new Date(operationsDetail[i].fechaIni);
                     const precioFin = parseFloat(operationsDetail[i].precioFin);
                     const precioIni = parseFloat(operationsDetail[i].precioIni);
+                    console.log(fechaIni);
+                    console.log(fechaFin);
+                    console.log(fechaIni/1000);
+                    console.log(fechaFin/1000);
                     const balance = parseFloat(y_axix[i]);
                     if (operationsDetail[i].tipoOP.indexOf("Sell") == 0) {
                       //sell
