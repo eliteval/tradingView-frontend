@@ -103,7 +103,6 @@ export class TVChartContainer extends React.PureComponent {
             if (chart_data[dataLength].status == "P") {
               if (y_axix.length > 0) {
                 n = 0;
-                alreadyIn = true;
                 let { operationsDetail } = chart_data[dataLength];
                 for (var i = 0; i < y_axix.length; i++) {
                   if (operationsDetail[i].tipoOP != -1) {
