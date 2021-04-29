@@ -1089,7 +1089,7 @@ $(function () {
       $("#nav-tabContent2 > div.active #addrow").trigger("click");
       var newRow = $(
         "div.active > table.order-list > tbody > tr > td.gallery_new" +
-        (counter - 1)
+          (counter - 1)
       );
       addNumberOfRule(newRow);
       // Move Configuration Elements
@@ -1900,6 +1900,9 @@ $(function () {
       icons.css("cursor", "pointer");
 
       clearInterval(intervalFunction);
+      const tt = JSON.stringify({ end: true });
+      const frame = document.getElementById("tradingView-content");
+      frame.contentWindow.postMessage(tt, "https://tradingview.tradeasy.tech");
     });
   });
 
@@ -1922,19 +1925,13 @@ $(function () {
       `https://tradingview.tradeasy.tech/${encodeURIComponent(
         validation_data[0].value
       )}` +
-      `/${encodeURIComponent(
-        validation_data[1].value
-      )}/${encodeURIComponent(
-        validation_data[2].value
-      )}/${encodeURIComponent(
-        validation_data[3].value
-      )}/${encodeURIComponent(
-        validation_data[4].value
-      )}/${encodeURIComponent(
-        validation_data[5].value
-      )}/${encodeURIComponent(
-        validation_data[6].value
-      )}/${encodeURIComponent(validation_data[7].value)}`
+        `/${encodeURIComponent(validation_data[1].value)}/${encodeURIComponent(
+          validation_data[2].value
+        )}/${encodeURIComponent(validation_data[3].value)}/${encodeURIComponent(
+          validation_data[4].value
+        )}/${encodeURIComponent(validation_data[5].value)}/${encodeURIComponent(
+          validation_data[6].value
+        )}/${encodeURIComponent(validation_data[7].value)}`
     );
     var alreadyIn = false;
 
@@ -2151,6 +2148,9 @@ $(function () {
 
           if (countt > timeOut_seconds) {
             clearInterval(intervalFunction);
+            const tt=JSON.stringify({ end:true });
+            const frame = document.getElementById("tradingView-content");
+              frame.contentWindow.postMessage(tt, "https://tradingview.tradeasy.tech");
             $("#cancel-validattion").trigger("click");
             $("#server_not_responding").trigger("click");
             $(".validateScreen").show();
@@ -2176,10 +2176,17 @@ $(function () {
             } else if (responseData.status == "P") {
               if (y_axix.length > 0) {
                 let { operationsDetail } = responseData;
-                const frame = document.getElementById('tradingView-content');
-                const tt=JSON.stringify({ y_axix, operationsDetail });
-                console.log(tt);
-                frame.contentWindow.postMessage(tt, "https://tradingview.tradeasy.tech");
+                const frame = document.getElementById("tradingView-content");
+                const tt = JSON.stringify({
+                  y_axix,
+                  operationsDetail,
+                  status: responseData.status,
+                });
+                console.log(tt);                
+                frame.contentWindow.postMessage(
+                  tt,
+                  "https://tradingview.tradeasy.tech"
+                );
                 if (showChart) {
                   $(".validatingGraph").hide();
                   $("#chartContainer").show();
@@ -2235,10 +2242,17 @@ $(function () {
                 //if (y_axis_points.length < responseData.validation_points && y_axix.length > 0) {
                 if (y_axix.length > 0) {
                   let { operationsDetail } = responseData;
-                  const frame = document.getElementById('tradingView-content');
-                  const tt=JSON.stringify({ y_axix, operationsDetail });
+                  const frame = document.getElementById("tradingView-content");
+                  const tt = JSON.stringify({
+                    y_axix,
+                    operationsDetail,
+                    status: responseData.status,
+                  });
                   console.log(tt);
-                  frame.contentWindow.postMessage(tt, "https://tradingview.tradeasy.tech");
+                  frame.contentWindow.postMessage(
+                    tt,
+                    "https://tradingview.tradeasy.tech"
+                  );
                   for (var i = 0; i < y_axix.length; i++) {
                     let dataPoint = {
                       y: parseFloat(y_axix[i]),
@@ -2305,8 +2319,20 @@ $(function () {
               ).removeClass("disabled_events");
 
               clearInterval(intervalFunction);
+              const tt = JSON.stringify({ end: true });
+              const frame = document.getElementById("tradingView-content");
+              frame.contentWindow.postMessage(
+                tt,
+                "https://tradingview.tradeasy.tech"
+              );
             } else if (responseData.status == "E") {
               var report = responseData.report;
+              const tt = JSON.stringify({ end: true });
+              const frame = document.getElementById("tradingView-content");
+              frame.contentWindow.postMessage(
+                tt,
+                "https://tradingview.tradeasy.tech"
+              );
               clearInterval(intervalFunction);
               // Ocultar Validating Screen
               $(".validatingGraph").html(text);
@@ -2325,7 +2351,6 @@ $(function () {
         };
 
         updateChart(validation_id, validation_data[1].value);
-        
 
         intervalFunction = setInterval(function () {
           updateChart(validation_id, validation_data[1].value);
@@ -2549,8 +2574,8 @@ $(function () {
     survey.questions.forEach((question) => {
       let questionDiv = $(
         '<div class="question"><p>' +
-        question.text +
-        '</p><div class="answers"></div></div>'
+          question.text +
+          '</p><div class="answers"></div></div>'
       );
       questionDiv.data("id", question.id);
       if (index > 0) {
@@ -2561,17 +2586,17 @@ $(function () {
         let answerDiv = $('<div class="custom-control custom-radio">');
         answerDiv.append(
           '<input class="custom-control-input" type="radio" name="answer' +
-          (index + 1) +
-          '" id="survAnswer' +
-          answer.id +
-          '" value="' +
-          answer.id +
-          '">'
+            (index + 1) +
+            '" id="survAnswer' +
+            answer.id +
+            '" value="' +
+            answer.id +
+            '">'
         );
         answerDiv.append(
           '<label class="custom-control-label" for="survAnswer' +
-          answer.id +
-          '"></label>'
+            answer.id +
+            '"></label>'
         );
         answerDiv.find("> label").text(answer.text);
         if (ansIndex == 0) {
@@ -2580,10 +2605,10 @@ $(function () {
         if (answer.type == "O") {
           answerDiv.append(
             '<input class="form-control" type="text" name="otherAns' +
-            answer.id +
-            '" placeholder="' +
-            placeholder +
-            '">'
+              answer.id +
+              '" placeholder="' +
+              placeholder +
+              '">'
           );
         }
 
@@ -2741,8 +2766,8 @@ function set_default_lis($, row_L = false) {
           } else {
             var first_row = $(
               '.tab-pane[data-tab_id="' +
-              element_id +
-              '"] table tr:first td .trash'
+                element_id +
+                '"] table tr:first td .trash'
             );
             var appendedEl = $this.clone().appendTo(first_row).show();
           }
