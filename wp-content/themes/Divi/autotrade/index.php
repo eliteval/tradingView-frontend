@@ -5072,7 +5072,7 @@ FROM `elements` WHERE ELEMENT_GROUP_ID = 0 AND ELEMENT_NAME != 'SEQ' AND ELEMENT
 
                 </div>
                 <div id="tradingView" class="col-sm-12" style="height: auto;display:none;">
-                    <iframe id="tradingView-content" style="height: 500px; margin-top: 20px; border:none;" class="col-sm-12" src="" title="Trading View React"></iframe>
+                    <iframe id="tradingView-content" style="height: 465px; margin-top: 10px; border:none;" class="col-sm-12" src="" title="Trading View React"></iframe>
                 </div>
 
                 <?php
