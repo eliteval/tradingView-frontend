@@ -24,6 +24,8 @@ export default function App(props) {
           ? tickers.find((ele) => ele.key == props.match.params.ticker).val
           : "GBP/USD"
       }
+      start_date={props.match.params.start_date}
+      end_date={props.match.params.end_date}
       // timeOut={
       //   props.match.params.timeOut
       // }

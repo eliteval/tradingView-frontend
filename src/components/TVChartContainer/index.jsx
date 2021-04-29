@@ -1,6 +1,7 @@
 import * as React from "react";
 import "./index.css";
 import Datafeed from "./api/";
+import { ContactSupportOutlined } from "@material-ui/icons";
 
 function getLanguageFromURL() {
   const regex = new RegExp("[\\?&]lang=([^&#]*)");
@@ -9,13 +10,11 @@ function getLanguageFromURL() {
     ? null
     : decodeURIComponent(results[1].replace(/\+/g, " "));
 }
-function pintarLinea(widget, a1, b1, price1, price2) {
-  console.log("line");
-  console.log(a1 + " " + b1 + " " + price1 + " " + price2);
+function pintarLinea(widget, a1, b1, price1, price2) {  
   widget.activeChart().createMultipointShape(
     [
-      { time: a1 / 1000, channel: "open" },
-      { time: b1 / 1000, channel: "open" },
+      { time: a1 / 1000, price:price1, channel: "open" },
+      { time: b1 / 1000, price:price2, channel: "open" },
     ],
     {
       shape: "trend_line",
@@ -26,11 +25,9 @@ function pintarLinea(widget, a1, b1, price1, price2) {
     }
   );
 }
-function pintarFlecha(widget, a1, shape, text, price) {
-  console.log("shape");
-  console.log(a1 + " " + shape + " " + text + " " + price);
+function pintarFlecha(widget, a1, shape, text, price) {  
   widget.activeChart().createShape(
-    { time: a1 / 1000, channel: "open" },
+    { time: a1 / 1000, price, channel: "open" },
     {
       shape: shape,
       text: text,
@@ -92,8 +89,12 @@ export class TVChartContainer extends React.PureComponent {
       widgetOptions
     ));
     const props = this.props;
+    console.log(props.start_date);
+    console.log(props.end_date);
     widget.onChartReady(() => {
       let dataLength = 0;
+      let chart_data=window.chart_data;
+      console.log(window.chart_data);
       let intervalFunction = setInterval(() => {
         while (dataLength < chart_data.length) {
           if (chart_data[dataLength].end === true) {
@@ -182,10 +183,7 @@ export class TVChartContainer extends React.PureComponent {
                         profit,
                         precioFin
                       );
-                    }
-                    clearInterval(intervalFunction);
-                    console.log(chart_data);
-                    break;
+                    }                   
                   }
                 }
                 // console.log(dps);
@@ -276,9 +274,7 @@ export class TVChartContainer extends React.PureComponent {
                           precioFin
                         );
                       }
-                      clearInterval(intervalFunction);
-                      console.log(chart_data);
-                      break;
+                      
                     }
                   }
                 }
