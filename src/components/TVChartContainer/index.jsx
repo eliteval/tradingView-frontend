@@ -114,7 +114,7 @@ export class TVChartContainer extends React.PureComponent {
                     console.log(date);
                     console.log(date[2] +
                       "-" +
-                      data[1] +
+                      date[1] +
                       "-" +
                       date[0] +
                       "T" +
@@ -122,7 +122,7 @@ export class TVChartContainer extends React.PureComponent {
                     const fechaFin = new Date(
                       date[2] +
                         "-" +
-                        data[1] +
+                        date[1] +
                         "-" +
                         date[0] +
                         "T" +
@@ -134,7 +134,7 @@ export class TVChartContainer extends React.PureComponent {
                     console.log(date);
                     console.log(date[2] +
                       "-" +
-                      data[1] +
+                      date[1] +
                       "-" +
                       date[0] +
                       "T" +
@@ -142,7 +142,7 @@ export class TVChartContainer extends React.PureComponent {
                     const fechaIni = new Date(
                       date[2] +
                         "-" +
-                        data[1] +
+                        date[1] +
                         "-" +
                         date[0] +
                         "T" +
@@ -220,7 +220,7 @@ export class TVChartContainer extends React.PureComponent {
                       const fechaFin = new Date(
                         date[2] +
                           "-" +
-                          data[1] +
+                          date[1] +
                           "-" +
                           date[0] +
                           "T" +
@@ -231,7 +231,7 @@ export class TVChartContainer extends React.PureComponent {
                       const fechaIni = new Date(
                         date[2] +
                           "-" +
-                          data[1] +
+                          date[1] +
                           "-" +
                           date[0] +
                           "T" +
