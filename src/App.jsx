@@ -24,21 +24,21 @@ export default function App(props) {
           ? tickers.find((ele) => ele.key == props.match.params.ticker).val
           : "GBP/USD"
       }
-      timeOut={
-        props.match.params.timeOut
-      }
-      validateId={
-        props.match.params.validateId
-      }
-      currency={
-        props.match.params.currency
-      }
-      type={
-        props.match.params.type
-      }
-      lang={
-        props.match.params.lang
-      }
+      // timeOut={
+      //   props.match.params.timeOut
+      // }
+      // validateId={
+      //   props.match.params.validateId
+      // }
+      // currency={
+      //   props.match.params.currency
+      // }
+      // type={
+      //   props.match.params.type
+      // }
+      // lang={
+      //   props.match.params.lang
+      // }
     />
   );
 }

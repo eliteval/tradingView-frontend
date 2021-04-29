@@ -424,9 +424,9 @@ $(function () {
 
             $(".close_tooltip_save").on("click", function () {
               /*var elementos = $(this).parent().prev();
-						elementos.find(".card-body").each(function(){
-								$(this).parent().parent().find("a").trigger( "click" );
-						});*/
+            elementos.find(".card-body").each(function(){
+                $(this).parent().parent().find("a").trigger( "click" );
+            });*/
               updateValueOfLabel($(this).parent().prev());
 
               var oldParams = $this.find("span > .design_1 > div.parameters");
@@ -1089,7 +1089,7 @@ $(function () {
       $("#nav-tabContent2 > div.active #addrow").trigger("click");
       var newRow = $(
         "div.active > table.order-list > tbody > tr > td.gallery_new" +
-          (counter - 1)
+        (counter - 1)
       );
       addNumberOfRule(newRow);
       // Move Configuration Elements
@@ -1917,6 +1917,25 @@ $(function () {
     // $("#tradingView-content").load(`https://tradingview.tradeasy.tech/${encodeURIComponent(validation_data[0].value)}`+
     // `/${encodeURIComponent(validation_data[1].value)}/${encodeURIComponent(validation_data[2].value)}/${encodeURIComponent(validation_data[3].value)}/${encodeURIComponent(validation_data[4].value)}/${encodeURIComponent(validation_data[5].value)}/${encodeURIComponent(validation_data[6].value)}/${encodeURIComponent(validation_data[7].value)}`);
     //Variable que sirve para saber si ya hemos detectado datos para no seguir contando
+    $("#tradingView-content").attr(
+      "src",
+      `https://tradingview.tradeasy.tech/${encodeURIComponent(
+        validation_data[0].value
+      )}` +
+      `/${encodeURIComponent(
+        validation_data[1].value
+      )}/${encodeURIComponent(
+        validation_data[2].value
+      )}/${encodeURIComponent(
+        validation_data[3].value
+      )}/${encodeURIComponent(
+        validation_data[4].value
+      )}/${encodeURIComponent(
+        validation_data[5].value
+      )}/${encodeURIComponent(
+        validation_data[6].value
+      )}/${encodeURIComponent(validation_data[7].value)}`
+    );
     var alreadyIn = false;
 
     $("#chartContainer, .validateScreen, #infoOperations").hide();
@@ -2157,10 +2176,8 @@ $(function () {
             } else if (responseData.status == "P") {
               if (y_axix.length > 0) {
                 let { operationsDetail } = responseData;
-                chart_data.push({
-                  y_axix,
-                  operationsDetail,
-                });
+                const frame = document.getElementById('tradingView-content');
+                frame.contentWindow.postMessage(JSON.stringify({ y_axix, operationsDetail }), "http://tradingview.tradeasy.tech");
                 if (showChart) {
                   $(".validatingGraph").hide();
                   $("#chartContainer").show();
@@ -2216,10 +2233,8 @@ $(function () {
                 //if (y_axis_points.length < responseData.validation_points && y_axix.length > 0) {
                 if (y_axix.length > 0) {
                   let { operationsDetail } = responseData;
-                  chart_data.push({
-                    y_axix,
-                    operationsDetail,
-                  });
+                  const frame = document.getElementById('tradingView-content');
+                  frame.contentWindow.postMessage(JSON.stringify({ y_axix, operationsDetail }), "http://tradingview.tradeasy.tech");
                   for (var i = 0; i < y_axix.length; i++) {
                     let dataPoint = {
                       y: parseFloat(y_axix[i]),
@@ -2306,27 +2321,7 @@ $(function () {
         };
 
         updateChart(validation_id, validation_data[1].value);
-        $("#tradingView-content").attr(
-          "src",
-          `https://tradingview.tradeasy.tech/${encodeURIComponent(
-            validation_data[0].value
-          )}` +
-            `/${encodeURIComponent(
-              validation_data[1].value
-            )}/${encodeURIComponent(
-              validation_data[2].value
-            )}/${encodeURIComponent(
-              validation_data[3].value
-            )}/${encodeURIComponent(
-              validation_data[4].value
-            )}/${encodeURIComponent(
-              validation_data[5].value
-            )}/${encodeURIComponent(
-              validation_data[6].value
-            )}/${encodeURIComponent(validation_data[7].value)}/${parseInt(
-              $("#timeOut_seconds").val()
-            )}/${validation_id}/${typeToTradingView}/${lang}`
-        );
+        
 
         intervalFunction = setInterval(function () {
           updateChart(validation_id, validation_data[1].value);
@@ -2550,8 +2545,8 @@ $(function () {
     survey.questions.forEach((question) => {
       let questionDiv = $(
         '<div class="question"><p>' +
-          question.text +
-          '</p><div class="answers"></div></div>'
+        question.text +
+        '</p><div class="answers"></div></div>'
       );
       questionDiv.data("id", question.id);
       if (index > 0) {
@@ -2562,17 +2557,17 @@ $(function () {
         let answerDiv = $('<div class="custom-control custom-radio">');
         answerDiv.append(
           '<input class="custom-control-input" type="radio" name="answer' +
-            (index + 1) +
-            '" id="survAnswer' +
-            answer.id +
-            '" value="' +
-            answer.id +
-            '">'
+          (index + 1) +
+          '" id="survAnswer' +
+          answer.id +
+          '" value="' +
+          answer.id +
+          '">'
         );
         answerDiv.append(
           '<label class="custom-control-label" for="survAnswer' +
-            answer.id +
-            '"></label>'
+          answer.id +
+          '"></label>'
         );
         answerDiv.find("> label").text(answer.text);
         if (ansIndex == 0) {
@@ -2581,10 +2576,10 @@ $(function () {
         if (answer.type == "O") {
           answerDiv.append(
             '<input class="form-control" type="text" name="otherAns' +
-              answer.id +
-              '" placeholder="' +
-              placeholder +
-              '">'
+            answer.id +
+            '" placeholder="' +
+            placeholder +
+            '">'
           );
         }
 
@@ -2742,8 +2737,8 @@ function set_default_lis($, row_L = false) {
           } else {
             var first_row = $(
               '.tab-pane[data-tab_id="' +
-                element_id +
-                '"] table tr:first td .trash'
+              element_id +
+              '"] table tr:first td .trash'
             );
             var appendedEl = $this.clone().appendTo(first_row).show();
           }

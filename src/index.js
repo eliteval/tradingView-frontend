@@ -8,7 +8,7 @@ ReactDOM.render(
   <Router>
     <Switch>
       <Route
-        path="/:balance?/:currency?/:ticker?/:time_frame?/:start_date?/:end_date?/:user_id?/:session_strategy_id?/:timeOut?/:validateId?/:type?/:lang?"
+        path="/:balance?/:currency?/:ticker?/:time_frame?/:start_date?/:end_date?/:user_id?/:session_strategy_id?"
         component={App}
       />
     </Switch>
