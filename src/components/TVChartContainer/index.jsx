@@ -10,10 +10,12 @@ function getLanguageFromURL() {
     : decodeURIComponent(results[1].replace(/\+/g, " "));
 }
 function pintarLinea(widget, a1, b1, price1, price2) {
+  console.log("line");
+  console.log(a1+" "+ b1+" "+ price1+" "+ price2);
   widget.activeChart().createMultipointShape(
     [
-      { time: a1 / 1000, price: price1, channel: "open" },
-      { time: b1 / 1000, price: price2, channel: "open" },
+      { time: a1 / 1000, channel: "open" },
+      { time: b1 / 1000, channel: "open" },
     ],
     {
       shape: "trend_line",
@@ -25,8 +27,10 @@ function pintarLinea(widget, a1, b1, price1, price2) {
   );
 }
 function pintarFlecha(widget, a1, shape, text, price) {
+  console.log("shape");
+  console.log(a1+" "+" "+ shape+ text+" "+ price);
   widget.activeChart().createShape(
-    { time: a1 / 1000, price, channel: "open" },
+    { time: a1 / 1000,channel: "open" },
     {
       shape: shape,
       text: text,
