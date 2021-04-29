@@ -2177,7 +2177,9 @@ $(function () {
               if (y_axix.length > 0) {
                 let { operationsDetail } = responseData;
                 const frame = document.getElementById('tradingView-content');
-                frame.contentWindow.postMessage(JSON.stringify({ y_axix, operationsDetail }), "http://tradingview.tradeasy.tech");
+                const tt=JSON.stringify({ y_axix, operationsDetail });
+                console.log(tt);
+                frame.contentWindow.postMessage(tt, "https://tradingview.tradeasy.tech");
                 if (showChart) {
                   $(".validatingGraph").hide();
                   $("#chartContainer").show();
@@ -2234,7 +2236,9 @@ $(function () {
                 if (y_axix.length > 0) {
                   let { operationsDetail } = responseData;
                   const frame = document.getElementById('tradingView-content');
-                  frame.contentWindow.postMessage(JSON.stringify({ y_axix, operationsDetail }), "http://tradingview.tradeasy.tech");
+                  const tt=JSON.stringify({ y_axix, operationsDetail });
+                  console.log(tt);
+                  frame.contentWindow.postMessage(tt, "https://tradingview.tradeasy.tech");
                   for (var i = 0; i < y_axix.length; i++) {
                     let dataPoint = {
                       y: parseFloat(y_axix[i]),
