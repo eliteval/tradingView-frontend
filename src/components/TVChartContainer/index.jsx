@@ -10,11 +10,11 @@ function getLanguageFromURL() {
     ? null
     : decodeURIComponent(results[1].replace(/\+/g, " "));
 }
-function pintarLinea(widget, a1, b1, price1, price2) {  
+function pintarLinea(widget, a1, b1, price1, price2) {
   widget.activeChart().createMultipointShape(
     [
-      { time: a1 / 1000, price:price1, channel: "open" },
-      { time: b1 / 1000, price:price2, channel: "open" },
+      { time: a1, price: price1, channel: "open" },
+      { time: b1, price: price2, channel: "open" },
     ],
     {
       shape: "trend_line",
@@ -25,9 +25,9 @@ function pintarLinea(widget, a1, b1, price1, price2) {
     }
   );
 }
-function pintarFlecha(widget, a1, shape, text, price) {  
+function pintarFlecha(widget, a1, shape, text, price) {
   widget.activeChart().createShape(
-    { time: a1 / 1000, price, channel: "open" },
+    { time: a1, price, channel: "open" },
     {
       shape: shape,
       text: text,
@@ -82,124 +82,39 @@ export class TVChartContainer extends React.PureComponent {
         "mainSeriesProperties.candleStyle.wickUpColor": "#336854",
         "mainSeriesProperties.candleStyle.wickDownColor": "#7f323f",
       },
-      // timeframe: timeframe+"D"
+      // timeframe: "0.5M"
     };
 
     const widget = (window.tvWidget = new window.TradingView.widget(
       widgetOptions
     ));
     const props = this.props;
-    console.log(props.start_date.split('%2F'));
-    console.log(props.end_date.split('%2F'));
+    // console.log(props.start_date.split('%2F'));
+    // console.log(props.end_date.split('%2F'));
     widget.onChartReady(() => {
-      let dataLength = 0;
-      let chart_data=window.chart_data;
-      console.log(window.chart_data);
-      let intervalFunction = setInterval(() => {
-        while (dataLength < chart_data.length) {
-          if (chart_data[dataLength].end === true) {
-            clearInterval(intervalFunction);
-            console.log(chart_data);
-            break;
-          }
-          try {
-            let y_axix = chart_data[dataLength].y_axix;
-            let n = 0;
-            if (chart_data[dataLength].status == "P") {
-              if (y_axix.length > 0) {
-                n = 0;
-                let { operationsDetail } = chart_data[dataLength];
-                for (var i = 0; i < y_axix.length; i++) {
-                  if (operationsDetail[i].tipoOP != -1) {
-                    const profit = parseFloat(operationsDetail[i].OrderProf);
-                    let dateTime = operationsDetail[i].fechaFin.split(" ");
-                    let date = dateTime[0].split("/");
-                    const fechaFin = new Date(
-                      date[2] +
-                        "-" +
-                        date[1] +
-                        "-" +
-                        date[0] +
-                        "T" +
-                        dateTime[1]
-                    );
-                    dateTime = operationsDetail[i].fechaIni.split(" ");
-                    date = dateTime[0].split("/");
-                    const fechaIni = new Date(
-                      date[2] +
-                        "-" +
-                        date[1] +
-                        "-" +
-                        date[0] +
-                        "T" +
-                        dateTime[1]
-                    );
-                    const precioFin = parseFloat(operationsDetail[i].precioFin);
-                    const precioIni = parseFloat(operationsDetail[i].precioIni);
-                    const balance = parseFloat(y_axix[i]);
-                    if (operationsDetail[i].tipoOP.indexOf("Sell") == 0) {
-                      //sell
-                      pintarLinea(
-                        widget,
-                        fechaIni,
-                        fechaFin,
-                        precioIni,
-                        precioFin
-                      );
-                      pintarFlecha(
-                        widget,
-                        fechaIni,
-                        "arrow_down",
-                        "Sell",
-                        precioIni
-                      );
-                      pintarFlecha(
-                        widget,
-                        fechaFin,
-                        "arrow_up",
-                        profit,
-                        precioFin
-                      );
-                    } else {
-                      //buy
-                      pintarLinea(
-                        widget,
-                        fechaIni,
-                        fechaFin,
-                        precioIni,
-                        precioFin
-                      );
-                      pintarFlecha(
-                        widget,
-                        fechaIni,
-                        "arrow_up",
-                        "Buy",
-                        precioIni
-                      );
-                      pintarFlecha(
-                        widget,
-                        fechaFin,
-                        "arrow_down",
-                        profit,
-                        precioFin
-                      );
-                    }                   
-                  }
-                }
-                // console.log(dps);
-              }
-            } else if (chart_data[dataLength].status == "F") {
-              if (y_axix != "") {
-                // JFS - 01/07/2020 - bug no se muestra la ultima operacion
-                //if (y_axis_points.length < data.validation_points && y_axix.length > 0) {
+      widget
+        .activeChart()
+        .onVisibleRangeChanged()
+        .subscribe(null, ({ from, to }) =>{
+          let dataLength = 0;
+          let chart_data = window.chart_data;
+          while (dataLength < chart_data.length) {
+            if (chart_data[dataLength].end === true) {              
+              break;
+            }
+            try {
+              let y_axix = chart_data[dataLength].y_axix;
+              let n = 0;
+              if (chart_data[dataLength].status == "P") {
                 if (y_axix.length > 0) {
+                  n = 0;
                   let { operationsDetail } = chart_data[dataLength];
                   for (var i = 0; i < y_axix.length; i++) {
                     if (operationsDetail[i].tipoOP != -1) {
                       const profit = parseFloat(operationsDetail[i].OrderProf);
                       let dateTime = operationsDetail[i].fechaFin.split(" ");
                       let date = dateTime[0].split("/");
-                      const fechaFin = new Date(
+                      const fechaFin = (new Date(
                         date[2] +
                           "-" +
                           date[1] +
@@ -207,10 +122,10 @@ export class TVChartContainer extends React.PureComponent {
                           date[0] +
                           "T" +
                           dateTime[1]
-                      );
+                      ))/1000;
                       dateTime = operationsDetail[i].fechaIni.split(" ");
                       date = dateTime[0].split("/");
-                      const fechaIni = new Date(
+                      const fechaIni = (new Date(
                         date[2] +
                           "-" +
                           date[1] +
@@ -218,74 +133,171 @@ export class TVChartContainer extends React.PureComponent {
                           date[0] +
                           "T" +
                           dateTime[1]
-                      );
-
-                      const precioFin = parseFloat(
-                        operationsDetail[i].precioFin
-                      );
-                      const precioIni = parseFloat(
-                        operationsDetail[i].precioIni
-                      );
+                      ))/1000;
+                      const precioFin = parseFloat(operationsDetail[i].precioFin);
+                      const precioIni = parseFloat(operationsDetail[i].precioIni);
                       const balance = parseFloat(y_axix[i]);
                       if (operationsDetail[i].tipoOP.indexOf("Sell") == 0) {
                         //sell
-                        pintarLinea(
-                          widget,
-                          fechaIni,
-                          fechaFin,
-                          precioIni,
-                          precioFin
-                        );
-                        pintarFlecha(
-                          widget,
-                          fechaIni,
-                          "arrow_down",
-                          "Sell",
-                          precioIni
-                        );
-                        pintarFlecha(
-                          widget,
-                          fechaFin,
-                          "arrow_up",
-                          profit,
-                          precioFin
-                        );
+                        if((fechaFin>from && fechaFin<to) || (fechaIni>from && fechaIni<to))
+                          pintarLinea(
+                            widget,
+                            fechaIni,
+                            fechaFin,
+                            precioIni,
+                            precioFin
+                          );
+                        if(fechaIni>from && fechaIni<to)
+                          pintarFlecha(
+                            widget,
+                            fechaIni,
+                            "arrow_down",
+                            "Sell",
+                            precioIni
+                          );
+                        if(fechaFin>from && fechaFin<to)
+                          pintarFlecha(
+                            widget,
+                            fechaFin,
+                            "arrow_up",
+                            profit,
+                            precioFin
+                          );
                       } else {
                         //buy
-                        pintarLinea(
-                          widget,
-                          fechaIni,
-                          fechaFin,
-                          precioIni,
-                          precioFin
-                        );
-                        pintarFlecha(
-                          widget,
-                          fechaIni,
-                          "arrow_up",
-                          "Buy",
-                          precioIni
-                        );
-                        pintarFlecha(
-                          widget,
-                          fechaFin,
-                          "arrow_down",
-                          profit,
-                          precioFin
-                        );
+                        if((fechaFin>from && fechaFin<to) || (fechaIni>from && fechaIni<to))
+                          pintarLinea(
+                            widget,
+                            fechaIni,
+                            fechaFin,
+                            precioIni,
+                            precioFin
+                          );
+                        if(fechaIni>from && fechaIni<to)
+                          pintarFlecha(
+                            widget,
+                            fechaIni,
+                            "arrow_up",
+                            "Buy",
+                            precioIni
+                          );
+                        if(fechaFin>from && fechaFin<to)
+                          pintarFlecha(
+                            widget,
+                            fechaFin,
+                            "arrow_down",
+                            profit,
+                            precioFin
+                          );
                       }
-                      
+                    }
+                  }
+                  // console.log(dps);
+                }
+              } else if (chart_data[dataLength].status == "F") {
+                if (y_axix != "") {
+                  // JFS - 01/07/2020 - bug no se muestra la ultima operacion
+                  //if (y_axis_points.length < data.validation_points && y_axix.length > 0) {
+                  if (y_axix.length > 0) {
+                    let { operationsDetail } = chart_data[dataLength];
+                    for (var i = 0; i < y_axix.length; i++) {
+                      if (operationsDetail[i].tipoOP != -1) {
+                        const profit = parseFloat(operationsDetail[i].OrderProf);
+                        let dateTime = operationsDetail[i].fechaFin.split(" ");
+                        let date = dateTime[0].split("/");
+                        const fechaFin = (new Date(
+                          date[2] +
+                            "-" +
+                            date[1] +
+                            "-" +
+                            date[0] +
+                            "T" +
+                            dateTime[1]
+                        ))/1000;
+                        dateTime = operationsDetail[i].fechaIni.split(" ");
+                        date = dateTime[0].split("/");
+                        const fechaIni = (new Date(
+                          date[2] +
+                            "-" +
+                            date[1] +
+                            "-" +
+                            date[0] +
+                            "T" +
+                            dateTime[1]
+                        ))/1000;
+  
+                        const precioFin = parseFloat(
+                          operationsDetail[i].precioFin
+                        );
+                        const precioIni = parseFloat(
+                          operationsDetail[i].precioIni
+                        );
+                        const balance = parseFloat(y_axix[i]);
+                        if (operationsDetail[i].tipoOP.indexOf("Sell") == 0) {
+                          //sell
+                          if((fechaFin>from && fechaFin<to) || (fechaIni>from && fechaIni<to))
+                            pintarLinea(
+                              widget,
+                              fechaIni,
+                              fechaFin,
+                              precioIni,
+                              precioFin
+                            );
+                          if(fechaIni>from && fechaIni<to)
+                            pintarFlecha(
+                              widget,
+                              fechaIni,
+                              "arrow_down",
+                              "Sell",
+                              precioIni
+                            );
+                          if(fechaFin>from && fechaFin<to)
+                            pintarFlecha(
+                              widget,
+                              fechaFin,
+                              "arrow_up",
+                              profit,
+                              precioFin
+                            );
+                        } else {
+                          //buy
+                          if((fechaFin>from && fechaFin<to) || (fechaIni>from && fechaIni<to))
+                            pintarLinea(
+                              widget,
+                              fechaIni,
+                              fechaFin,
+                              precioIni,
+                              precioFin
+                            );
+                          if(fechaIni>from && fechaIni<to)
+                            pintarFlecha(
+                              widget,
+                              fechaIni,
+                              "arrow_up",
+                              "Buy",
+                              precioIni
+                            );
+                          if(fechaFin>from && fechaFin<to)
+                            pintarFlecha(
+                              widget,
+                              fechaFin,
+                              "arrow_down",
+                              profit,
+                              precioFin
+                            );
+                        }
+                      }
                     }
                   }
                 }
               }
+            } catch (err) {
+              console.log(err);
             }
-          } catch (err) {
-            console.log(err);
+            dataLength++;
           }
-          dataLength++;
-        }
-      }, 3000);
+        });
+
 
       // setTimeout(() => {
       //   let updateInterval = 3000;
