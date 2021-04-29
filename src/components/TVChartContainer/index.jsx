@@ -89,8 +89,8 @@ export class TVChartContainer extends React.PureComponent {
       widgetOptions
     ));
     const props = this.props;
-    console.log(props.start_date);
-    console.log(props.end_date);
+    console.log(props.start_date.split('%2F'));
+    console.log(props.end_date.split('%2F'));
     widget.onChartReady(() => {
       let dataLength = 0;
       let chart_data=window.chart_data;
