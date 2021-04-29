@@ -94,7 +94,7 @@ export class TVChartContainer extends React.PureComponent {
       let intervalFunction = setInterval(() => {
         while (dataLength < chart_data.length) {
           console.log(chart_data);
-          if(chart_data[dataLength].end===true){
+          if (chart_data[dataLength].end === true) {
             clearInterval(intervalFunction);
             break;
           }
@@ -108,14 +108,34 @@ export class TVChartContainer extends React.PureComponent {
                 for (var i = 0; i < y_axix.length; i++) {
                   if (operationsDetail[i].tipoOP != -1) {
                     const profit = parseFloat(operationsDetail[i].OrderProf);
-                    const fechaFin = new Date(operationsDetail[i].fechaFin);
-                    const fechaIni = new Date(operationsDetail[i].fechaIni);
+                    let dateTime = operationsDetail[i].fechaFin.split(" ");
+                    let date = dateTime[0].split("/");
+                    const fechaFin = new Date(
+                      date[2] +
+                        "-" +
+                        (parsInt(date[1]) - 1) +
+                        "-" +
+                        date[0] +
+                        "T" +
+                        dateTime[1]
+                    );
+                    dateTime = operationsDetail[i].fechaIni.split(" ");
+                    date = dateTime[0].split("/");
+                    const fechaIni = new Date(
+                      date[2] +
+                        "-" +
+                        (parsInt(date[1]) - 1) +
+                        "-" +
+                        date[0] +
+                        "T" +
+                        dateTime[1]
+                    );
                     const precioFin = parseFloat(operationsDetail[i].precioFin);
                     const precioIni = parseFloat(operationsDetail[i].precioIni);
                     console.log(fechaIni);
                     console.log(fechaFin);
-                    console.log(fechaIni/1000);
-                    console.log(fechaFin/1000);
+                    console.log(fechaIni / 1000);
+                    console.log(fechaFin / 1000);
                     const balance = parseFloat(y_axix[i]);
                     if (operationsDetail[i].tipoOP.indexOf("Sell") == 0) {
                       //sell
@@ -177,8 +197,29 @@ export class TVChartContainer extends React.PureComponent {
                   for (var i = 0; i < y_axix.length; i++) {
                     if (operationsDetail[i].tipoOP != -1) {
                       const profit = parseFloat(operationsDetail[i].OrderProf);
-                      const fechaFin = new Date(operationsDetail[i].fechaFin);
-                      const fechaIni = new Date(operationsDetail[i].fechaIni);
+                      let dateTime = operationsDetail[i].fechaFin.split(" ");
+                      let date = dateTime[0].split("/");
+                      const fechaFin = new Date(
+                        date[2] +
+                          "-" +
+                          (parsInt(date[1]) - 1) +
+                          "-" +
+                          date[0] +
+                          "T" +
+                          dateTime[1]
+                      );
+                      dateTime = operationsDetail[i].fechaIni.split(" ");
+                      date = dateTime[0].split("/");
+                      const fechaIni = new Date(
+                        date[2] +
+                          "-" +
+                          (parsInt(date[1]) - 1) +
+                          "-" +
+                          date[0] +
+                          "T" +
+                          dateTime[1]
+                      );
+
                       const precioFin = parseFloat(
                         operationsDetail[i].precioFin
                       );
@@ -236,7 +277,7 @@ export class TVChartContainer extends React.PureComponent {
                     }
                   }
                 }
-              }              
+              }
             }
           } catch (err) {
             console.log(err);
