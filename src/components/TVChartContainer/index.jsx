@@ -11,7 +11,7 @@ function getLanguageFromURL() {
 }
 function pintarLinea(widget, a1, b1, price1, price2) {
   console.log("line");
-  console.log(a1+" "+ b1+" "+ price1+" "+ price2);
+  console.log(a1 + " " + b1 + " " + price1 + " " + price2);
   widget.activeChart().createMultipointShape(
     [
       { time: a1 / 1000, channel: "open" },
@@ -28,9 +28,9 @@ function pintarLinea(widget, a1, b1, price1, price2) {
 }
 function pintarFlecha(widget, a1, shape, text, price) {
   console.log("shape");
-  console.log(a1+" "+" "+ shape+ text+" "+ price);
+  console.log(a1 + " " + shape + " " + text + " " + price);
   widget.activeChart().createShape(
-    { time: a1 / 1000,channel: "open" },
+    { time: a1 / 1000, channel: "open" },
     {
       shape: shape,
       text: text,
@@ -44,7 +44,6 @@ function pintarFlecha(widget, a1, shape, text, price) {
 export class TVChartContainer extends React.PureComponent {
   constructor(props) {
     super(props);
-    console.log(props);
   }
   static defaultProps = {
     symbol: "GBP/USD",
@@ -97,7 +96,6 @@ export class TVChartContainer extends React.PureComponent {
       let dataLength = 0;
       let intervalFunction = setInterval(() => {
         while (dataLength < chart_data.length) {
-          console.log(chart_data);
           if (chart_data[dataLength].end === true) {
             clearInterval(intervalFunction);
             break;
@@ -112,17 +110,8 @@ export class TVChartContainer extends React.PureComponent {
                 for (var i = 0; i < y_axix.length; i++) {
                   if (operationsDetail[i].tipoOP != -1) {
                     const profit = parseFloat(operationsDetail[i].OrderProf);
-                    let dateTime = operationsDetail[i].fechaFin.split(" ");                    
+                    let dateTime = operationsDetail[i].fechaFin.split(" ");
                     let date = dateTime[0].split("/");
-                    console.log(dateTime);
-                    console.log(date);
-                    console.log(date[2] +
-                      "-" +
-                      date[1] +
-                      "-" +
-                      date[0] +
-                      "T" +
-                      dateTime[1]);
                     const fechaFin = new Date(
                       date[2] +
                         "-" +
@@ -134,15 +123,6 @@ export class TVChartContainer extends React.PureComponent {
                     );
                     dateTime = operationsDetail[i].fechaIni.split(" ");
                     date = dateTime[0].split("/");
-                    console.log(dateTime);
-                    console.log(date);
-                    console.log(date[2] +
-                      "-" +
-                      date[1] +
-                      "-" +
-                      date[0] +
-                      "T" +
-                      dateTime[1]);
                     const fechaIni = new Date(
                       date[2] +
                         "-" +
@@ -154,10 +134,6 @@ export class TVChartContainer extends React.PureComponent {
                     );
                     const precioFin = parseFloat(operationsDetail[i].precioFin);
                     const precioIni = parseFloat(operationsDetail[i].precioIni);
-                    console.log(fechaIni);
-                    console.log(fechaFin);
-                    console.log(fechaIni / 1000);
-                    console.log(fechaFin / 1000);
                     const balance = parseFloat(y_axix[i]);
                     if (operationsDetail[i].tipoOP.indexOf("Sell") == 0) {
                       //sell
@@ -206,6 +182,8 @@ export class TVChartContainer extends React.PureComponent {
                         precioFin
                       );
                     }
+                    clearInterval(intervalFunction);
+                    break;
                   }
                 }
                 // console.log(dps);
@@ -296,6 +274,8 @@ export class TVChartContainer extends React.PureComponent {
                           precioFin
                         );
                       }
+                      clearInterval(intervalFunction);
+                      break;
                     }
                   }
                 }
