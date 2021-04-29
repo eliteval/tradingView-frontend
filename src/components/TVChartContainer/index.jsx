@@ -93,6 +93,7 @@ export class TVChartContainer extends React.PureComponent {
       let dataLength = 0;
       let intervalFunction = setInterval(() => {
         while (dataLength < chart_data.length) {
+          console.log(chart_data);
           if(chart_data[dataLength].end===true){
             clearInterval(intervalFunction);
             break;
