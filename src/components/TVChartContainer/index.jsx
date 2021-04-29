@@ -113,7 +113,7 @@ export class TVChartContainer extends React.PureComponent {
                     const fechaFin = new Date(
                       date[2] +
                         "-" +
-                        (parsInt(date[1]) - 1) +
+                        (parseInt(date[1]) - 1) +
                         "-" +
                         date[0] +
                         "T" +
@@ -124,7 +124,7 @@ export class TVChartContainer extends React.PureComponent {
                     const fechaIni = new Date(
                       date[2] +
                         "-" +
-                        (parsInt(date[1]) - 1) +
+                        (parseInt(date[1]) - 1) +
                         "-" +
                         date[0] +
                         "T" +
@@ -202,7 +202,7 @@ export class TVChartContainer extends React.PureComponent {
                       const fechaFin = new Date(
                         date[2] +
                           "-" +
-                          (parsInt(date[1]) - 1) +
+                          (parseInt(date[1]) - 1) +
                           "-" +
                           date[0] +
                           "T" +
@@ -213,7 +213,7 @@ export class TVChartContainer extends React.PureComponent {
                       const fechaIni = new Date(
                         date[2] +
                           "-" +
-                          (parsInt(date[1]) - 1) +
+                          (parseInt(date[1]) - 1) +
                           "-" +
                           date[0] +
                           "T" +
