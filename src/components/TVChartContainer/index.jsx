@@ -96,6 +96,7 @@ export class TVChartContainer extends React.PureComponent {
         .activeChart()
         .onVisibleRangeChanged()
         .subscribe(null, ({ from, to }) =>{
+          console.log(from, to);
           let dataLength = 0;
           let chart_data = window.chart_data;
           while (dataLength < chart_data.length) {
@@ -139,7 +140,7 @@ export class TVChartContainer extends React.PureComponent {
                       const balance = parseFloat(y_axix[i]);
                       if (operationsDetail[i].tipoOP.indexOf("Sell") == 0) {
                         //sell
-                        if((fechaFin>from && fechaFin<to) || (fechaIni>from && fechaIni<to))
+                        if((fechaFin>from && fechaFin<to) && (fechaIni>from && fechaIni<to))
                           pintarLinea(
                             widget,
                             fechaIni,
@@ -165,7 +166,7 @@ export class TVChartContainer extends React.PureComponent {
                           );
                       } else {
                         //buy
-                        if((fechaFin>from && fechaFin<to) || (fechaIni>from && fechaIni<to))
+                        if((fechaFin>from && fechaFin<to) && (fechaIni>from && fechaIni<to))
                           pintarLinea(
                             widget,
                             fechaIni,
@@ -235,7 +236,7 @@ export class TVChartContainer extends React.PureComponent {
                         const balance = parseFloat(y_axix[i]);
                         if (operationsDetail[i].tipoOP.indexOf("Sell") == 0) {
                           //sell
-                          if((fechaFin>from && fechaFin<to) || (fechaIni>from && fechaIni<to))
+                          if((fechaFin>from && fechaFin<to) && (fechaIni>from && fechaIni<to))
                             pintarLinea(
                               widget,
                               fechaIni,
@@ -261,7 +262,7 @@ export class TVChartContainer extends React.PureComponent {
                             );
                         } else {
                           //buy
-                          if((fechaFin>from && fechaFin<to) || (fechaIni>from && fechaIni<to))
+                          if((fechaFin>from && fechaFin<to) && (fechaIni>from && fechaIni<to))
                             pintarLinea(
                               widget,
                               fechaIni,
