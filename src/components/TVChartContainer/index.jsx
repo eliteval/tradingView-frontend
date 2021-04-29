@@ -108,8 +108,17 @@ export class TVChartContainer extends React.PureComponent {
                 for (var i = 0; i < y_axix.length; i++) {
                   if (operationsDetail[i].tipoOP != -1) {
                     const profit = parseFloat(operationsDetail[i].OrderProf);
-                    let dateTime = operationsDetail[i].fechaFin.split(" ");
+                    let dateTime = operationsDetail[i].fechaFin.split(" ");                    
                     let date = dateTime[0].split("/");
+                    console.log(dateTime);
+                    console.log(date);
+                    console.log(date[2] +
+                      "-" +
+                      (parseInt(date[1]) - 1) +
+                      "-" +
+                      date[0] +
+                      "T" +
+                      dateTime[1]);
                     const fechaFin = new Date(
                       date[2] +
                         "-" +
@@ -121,6 +130,15 @@ export class TVChartContainer extends React.PureComponent {
                     );
                     dateTime = operationsDetail[i].fechaIni.split(" ");
                     date = dateTime[0].split("/");
+                    console.log(dateTime);
+                    console.log(date);
+                    console.log(date[2] +
+                      "-" +
+                      (parseInt(date[1]) - 1) +
+                      "-" +
+                      date[0] +
+                      "T" +
+                      dateTime[1]);
                     const fechaIni = new Date(
                       date[2] +
                         "-" +
