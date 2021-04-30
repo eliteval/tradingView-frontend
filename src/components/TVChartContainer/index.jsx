@@ -11,6 +11,8 @@ function getLanguageFromURL() {
     : decodeURIComponent(results[1].replace(/\+/g, " "));
 }
 function pintarLinea(widget, a1, b1, price1, price2) {
+  console.log(a1);
+  console.log(b1);
   widget.activeChart().createMultipointShape(
     [
       { time: a1, price: price1, channel: "open" },
@@ -82,6 +84,8 @@ export class TVChartContainer extends React.PureComponent {
         "mainSeriesProperties.candleStyle.wickUpColor": "#336854",
         "mainSeriesProperties.candleStyle.wickDownColor": "#7f323f",
       },
+      timezone: "Europe/Madrid",
+
       // timeframe: "0.5M"
     };
 
@@ -89,18 +93,16 @@ export class TVChartContainer extends React.PureComponent {
       widgetOptions
     ));
     const props = this.props;
-    // console.log(props.start_date.split('%2F'));
-    // console.log(props.end_date.split('%2F'));
     widget.onChartReady(() => {
+      widget.activeChart().setTimezone("Europe/Madrid");
       widget
         .activeChart()
         .onVisibleRangeChanged()
-        .subscribe(null, ({ from, to }) =>{
-          console.log(from, to);
+        .subscribe(null, ({ from, to }) => {
           let dataLength = 0;
           let chart_data = window.chart_data;
           while (dataLength < chart_data.length) {
-            if (chart_data[dataLength].end === true) {              
+            if (chart_data[dataLength].end === true) {
               break;
             }
             try {
@@ -115,58 +117,50 @@ export class TVChartContainer extends React.PureComponent {
                       const profit = parseFloat(operationsDetail[i].OrderProf);
                       let dateTime = operationsDetail[i].fechaFin.split(" ");
                       let date = dateTime[0].split("/");
-                      const fechaFin = (new Date(
-                        date[2] +
-                          "-" +
-                          date[1] +
-                          "-" +
-                          date[0] +
-                          "T" +
-                          dateTime[1]
-                      ))/1000;
+                      let time = dateTime[1].split(":");
+                      const fechaFin =
+                        new Date(
+                          Date.UTC(
+                            date[2],
+                            parseInt(date[1]) - 1,
+                            date[0],
+                            time[0],
+                            time[1],
+                            time[2]
+                          )
+                        ) / 1000;
                       dateTime = operationsDetail[i].fechaIni.split(" ");
                       date = dateTime[0].split("/");
-                      const fechaIni = (new Date(
-                        date[2] +
-                          "-" +
-                          date[1] +
-                          "-" +
-                          date[0] +
-                          "T" +
-                          dateTime[1]
-                      ))/1000;
-                      const precioFin = parseFloat(operationsDetail[i].precioFin);
-                      const precioIni = parseFloat(operationsDetail[i].precioIni);
+                      time = dateTime[1].split(":");
+                      const fechaIni =
+                        new Date(
+                          Date.UTC(
+                            date[2],
+                            parseInt(date[1]) - 1,
+                            date[0],
+                            time[0],
+                            time[1],
+                            time[2]
+                          )
+                        ) / 1000;
+                      const precioFin = parseFloat(
+                        operationsDetail[i].precioFin
+                      );
+                      const precioIni = parseFloat(
+                        operationsDetail[i].precioIni
+                      );
                       const balance = parseFloat(y_axix[i]);
-                      if (operationsDetail[i].tipoOP.indexOf("Sell") == 0) {
-                        //sell
-                        if((fechaFin>from && fechaFin<to) && (fechaIni>from && fechaIni<to))
-                          pintarLinea(
-                            widget,
-                            fechaIni,
-                            fechaFin,
-                            precioIni,
-                            precioFin
-                          );
-                        if(fechaIni>from && fechaIni<to)
-                          pintarFlecha(
-                            widget,
-                            fechaIni,
-                            "arrow_down",
-                            "Sell",
-                            precioIni
-                          );
-                        if(fechaFin>from && fechaFin<to)
-                          pintarFlecha(
-                            widget,
-                            fechaFin,
-                            "arrow_up",
-                            profit,
-                            precioFin
-                          );
-                      } else {
+                      if (
+                        operationsDetail[i].tipoOP.indexOf("Buy") == 0 ||
+                        operationsDetail[i].tipoOP.indexOf("Compra") == 0
+                      ) {
                         //buy
-                        if((fechaFin>from && fechaFin<to) && (fechaIni>from && fechaIni<to))
+                        if (
+                          fechaFin > from &&
+                          fechaFin < to &&
+                          fechaIni > from &&
+                          fechaIni < to
+                        )
                           pintarLinea(
                             widget,
                             fechaIni,
@@ -174,7 +168,7 @@ export class TVChartContainer extends React.PureComponent {
                             precioIni,
                             precioFin
                           );
-                        if(fechaIni>from && fechaIni<to)
+                        if (fechaIni > from && fechaIni < to)
                           pintarFlecha(
                             widget,
                             fechaIni,
@@ -182,7 +176,7 @@ export class TVChartContainer extends React.PureComponent {
                             "Buy",
                             precioIni
                           );
-                        if(fechaFin>from && fechaFin<to)
+                        if (fechaFin > from && fechaFin < to)
                           pintarFlecha(
                             widget,
                             fechaFin,
@@ -190,10 +184,40 @@ export class TVChartContainer extends React.PureComponent {
                             profit,
                             precioFin
                           );
+                      } else {
+                        //sell
+                        if (
+                          fechaFin > from &&
+                          fechaFin < to &&
+                          fechaIni > from &&
+                          fechaIni < to
+                        )
+                          pintarLinea(
+                            widget,
+                            fechaIni,
+                            fechaFin,
+                            precioIni,
+                            precioFin
+                          );
+                        if (fechaIni > from && fechaIni < to)
+                          pintarFlecha(
+                            widget,
+                            fechaIni,
+                            "arrow_down",
+                            "Sell",
+                            precioIni
+                          );
+                        if (fechaFin > from && fechaFin < to)
+                          pintarFlecha(
+                            widget,
+                            fechaFin,
+                            "arrow_up",
+                            profit,
+                            precioFin
+                          );
                       }
                     }
                   }
-                  // console.log(dps);
                 }
               } else if (chart_data[dataLength].status == "F") {
                 if (y_axix != "") {
@@ -203,30 +227,38 @@ export class TVChartContainer extends React.PureComponent {
                     let { operationsDetail } = chart_data[dataLength];
                     for (var i = 0; i < y_axix.length; i++) {
                       if (operationsDetail[i].tipoOP != -1) {
-                        const profit = parseFloat(operationsDetail[i].OrderProf);
+                        const profit = parseFloat(
+                          operationsDetail[i].OrderProf
+                        );
                         let dateTime = operationsDetail[i].fechaFin.split(" ");
                         let date = dateTime[0].split("/");
-                        const fechaFin = (new Date(
-                          date[2] +
-                            "-" +
-                            date[1] +
-                            "-" +
-                            date[0] +
-                            "T" +
-                            dateTime[1]
-                        ))/1000;
+                        let time = dateTime[1].split(":");
+                        const fechaFin =
+                          new Date(
+                            Date.UTC(
+                              date[2],
+                              parseInt(date[1]) - 1,
+                              date[0],
+                              time[0],
+                              time[1],
+                              time[2]
+                            )
+                          ) / 1000;
                         dateTime = operationsDetail[i].fechaIni.split(" ");
                         date = dateTime[0].split("/");
-                        const fechaIni = (new Date(
-                          date[2] +
-                            "-" +
-                            date[1] +
-                            "-" +
-                            date[0] +
-                            "T" +
-                            dateTime[1]
-                        ))/1000;
-  
+                        time = dateTime[1].split(":");
+                        const fechaIni =
+                          new Date(
+                            Date.UTC(
+                              date[2],
+                              parseInt(date[1]) - 1,
+                              date[0],
+                              time[0],
+                              time[1],
+                              time[2]
+                            )
+                          ) / 1000;
+
                         const precioFin = parseFloat(
                           operationsDetail[i].precioFin
                         );
@@ -234,35 +266,17 @@ export class TVChartContainer extends React.PureComponent {
                           operationsDetail[i].precioIni
                         );
                         const balance = parseFloat(y_axix[i]);
-                        if (operationsDetail[i].tipoOP.indexOf("Sell") == 0) {
-                          //sell
-                          if((fechaFin>from && fechaFin<to) && (fechaIni>from && fechaIni<to))
-                            pintarLinea(
-                              widget,
-                              fechaIni,
-                              fechaFin,
-                              precioIni,
-                              precioFin
-                            );
-                          if(fechaIni>from && fechaIni<to)
-                            pintarFlecha(
-                              widget,
-                              fechaIni,
-                              "arrow_down",
-                              "Sell",
-                              precioIni
-                            );
-                          if(fechaFin>from && fechaFin<to)
-                            pintarFlecha(
-                              widget,
-                              fechaFin,
-                              "arrow_up",
-                              profit,
-                              precioFin
-                            );
-                        } else {
+                        if (
+                          operationsDetail[i].tipoOP.indexOf("Buy") == 0 ||
+                          operationsDetail[i].tipoOP.indexOf("Compra") == 0
+                        ) {
                           //buy
-                          if((fechaFin>from && fechaFin<to) && (fechaIni>from && fechaIni<to))
+                          if (
+                            fechaFin > from &&
+                            fechaFin < to &&
+                            fechaIni > from &&
+                            fechaIni < to
+                          )
                             pintarLinea(
                               widget,
                               fechaIni,
@@ -270,7 +284,7 @@ export class TVChartContainer extends React.PureComponent {
                               precioIni,
                               precioFin
                             );
-                          if(fechaIni>from && fechaIni<to)
+                          if (fechaIni > from && fechaIni < to)
                             pintarFlecha(
                               widget,
                               fechaIni,
@@ -278,11 +292,42 @@ export class TVChartContainer extends React.PureComponent {
                               "Buy",
                               precioIni
                             );
-                          if(fechaFin>from && fechaFin<to)
+                          if (fechaFin > from && fechaFin < to)
                             pintarFlecha(
                               widget,
                               fechaFin,
                               "arrow_down",
+                              profit,
+                              precioFin
+                            );
+                        } else {
+                          //sell
+                          if (
+                            fechaFin > from &&
+                            fechaFin < to &&
+                            fechaIni > from &&
+                            fechaIni < to
+                          )
+                            pintarLinea(
+                              widget,
+                              fechaIni,
+                              fechaFin,
+                              precioIni,
+                              precioFin
+                            );
+                          if (fechaIni > from && fechaIni < to)
+                            pintarFlecha(
+                              widget,
+                              fechaIni,
+                              "arrow_down",
+                              "Sell",
+                              precioIni
+                            );
+                          if (fechaFin > from && fechaFin < to)
+                            pintarFlecha(
+                              widget,
+                              fechaFin,
+                              "arrow_up",
                               profit,
                               precioFin
                             );
@@ -298,7 +343,6 @@ export class TVChartContainer extends React.PureComponent {
             dataLength++;
           }
         });
-
 
       // setTimeout(() => {
       //   let updateInterval = 3000;
