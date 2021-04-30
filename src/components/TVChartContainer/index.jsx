@@ -84,7 +84,6 @@ export class TVChartContainer extends React.PureComponent {
         "mainSeriesProperties.candleStyle.wickUpColor": "#336854",
         "mainSeriesProperties.candleStyle.wickDownColor": "#7f323f",
       },
-      timezone: "Europe/Madrid",
 
       // timeframe: "0.5M"
     };
@@ -94,7 +93,6 @@ export class TVChartContainer extends React.PureComponent {
     ));
     const props = this.props;
     widget.onChartReady(() => {
-      widget.activeChart().setTimezone("Europe/Madrid");
       widget
         .activeChart()
         .onVisibleRangeChanged()
